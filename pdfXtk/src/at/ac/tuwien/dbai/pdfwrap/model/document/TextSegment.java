@@ -31,6 +31,8 @@
  */
 package at.ac.tuwien.dbai.pdfwrap.model.document;
 
+import java.util.List;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -160,15 +162,27 @@ public class TextSegment extends GenericSegment
             return false;
     }
     
-    public String getAttributes()
+    @Override
+	public void mergeSegment(GenericSegment seg) {
+		
+		super.mergeSegment(seg);
+		
+		//Merge the text content of the two segments
+		text = text.concat(" ").concat(((TextSegment)seg).getText());
+	}
+    
+    @Override
+    public List<AttributeTuple> getAttributes()
     {
-    	// modified 6.01.06
-    	//return ("text: " + text + " " + super.getAttributes() + 
-    	//	" fontsize: " + fontSize + " font: " + font);
+    	List<AttributeTuple> attributeList = super.getAttributes();
     	
-    	return (super.getAttributes() + " text: " + text + " " + 
-    		" fontsize: " + fontSize + " font: " + fontName +
-    		" bold: " + isBold() + " italic: " + isItalic() + " hc: " + hashCode());
+    	attributeList.add(new AttributeTuple("text", text));
+    	attributeList.add(new AttributeTuple("fontsize", fontSize));
+    	attributeList.add(new AttributeTuple("font", fontName));
+    	attributeList.add(new AttributeTuple("bold", isBold()));
+    	attributeList.add(new AttributeTuple("italic", isItalic()));
+    	
+    	return attributeList;
     }
     
     public boolean isBold()

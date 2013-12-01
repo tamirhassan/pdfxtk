@@ -497,7 +497,9 @@ public class PageProcessor // extends PDFStreamEngine
         
         retVal.getItems().addAll(processingResult);
         retVal.getItems().addAll(textLines);
-
+        retVal.getItems().addAll(fragList);
+        retVal.getItems().addAll(charList);
+        
         retVal.getItems().addAll(imageList);
         retVal.getItems().addAll(lineList);
         retVal.getItems().addAll(rectList);

@@ -32,6 +32,7 @@
 package at.ac.tuwien.dbai.pdfwrap.model.document;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -210,15 +211,48 @@ public class GenericSegment implements Cloneable, IXmillumSegment
 	// note: these methods assume no negative widths!
 	// TODO: implement all Allen relations
 
+	@Override
 	public String toString()
 	{
-		return tagName() + " - " + getAttributes();
+		return getAttributes().toString();
 	}
 	
-	public String getAttributes()
-	{
-		return ("x1: " + x1 + " x2: " + x2 + " Xcen: " + getXmid() + " y1: " + y1
-			+ " y2: " + y2 + " Ycen: " + getYmid() + " hc: " + hashCode());
+	/**
+	 * Merges this segment with the input segment.
+	 * Make sure to include everything you want your segments to share within the body of this or inherited methods.
+	 * 
+	 * @param seg A segment you want to merge with
+	 */
+	public void mergeSegment(GenericSegment seg) {
+		
+		//TODO: better to create new objects? this is dangerous
+		
+		//Enlarges the bounding rectangle to fit the biggest bounds
+		x1 = (seg.x1 < x1) ? seg.x1 : x1;
+		x2 = (seg.x2 > x2) ? seg.x2 : x2;
+		y1 = (seg.y1 < y1) ? seg.y1 : y1;
+		y2 = (seg.y2 > y2) ? seg.y2 : y2;
+	}
+	
+	/**
+	 * Getter method for attributes
+	 * 
+	 * @return returns a list of all attributes that this segments contains together with the segment type
+	 */
+	public List<AttributeTuple> getAttributes() {
+		
+		ArrayList<AttributeTuple> attributeList = new ArrayList<AttributeTuple>();
+		
+		//Add segment type for later recognition purposes
+		attributeList.add(new AttributeTuple("type", tagName()));
+		
+		//Add new attributes here
+		attributeList.add(new AttributeTuple("x1", x1));
+		attributeList.add(new AttributeTuple("y1", y1));
+		attributeList.add(new AttributeTuple("x2", x2));
+		attributeList.add(new AttributeTuple("y2", y2));	
+		
+		return attributeList;
 	}
 
 	public void setElementAttributes(Document resultDocument, Element newSegmentElement,

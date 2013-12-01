@@ -14,5 +14,7 @@
 	<classpathentry kind="lib" path="lib/pdfbox-1.8.2/pdfbox-app-1.8.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jai_imageio.jar"/>
+	<classpathentry kind="lib" path="/home/tam/Downloads/defoe/HyFo/dist/bin/hyfo-knuth_en_US.jar"/>
+	<classpathentry kind="lib" path="/home/tam/Downloads/defoe/HyFo/dist/bin/hyfo-knuth_en_US_18.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -51,6 +51,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 import org.apache.pdfbox.cos.COSStream;
+import org.apache.pdfbox.cos.COSString;
 import org.apache.pdfbox.exceptions.CryptographyException;
 import org.apache.pdfbox.exceptions.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -262,6 +263,21 @@ public class PDFObjectExtractor extends PDFStreamEngine
     protected void processOperator(PDFOperator arg0, List arg1)
     		throws IOException {
     	opIndex ++;
+    	/*
+    	System.out.print("arg0: " + arg0);
+    	for (Object o : arg1)
+    	{
+    		if (o instanceof COSString)
+    		{
+    			System.out.println("  " + ((COSString)o).getString());
+    		}
+    		else
+    		{
+    			System.out.print("  " + o);
+    		}
+    	}
+    	System.out.println();
+    	*/
     	// TODO Auto-generated method stub
     	super.processOperator(arg0, arg1);
     }
@@ -691,7 +707,7 @@ end commented out 1.1 */
     	if (fragmentList.size() > 0)
     	{
     		TextFragment lastFragment = fragmentList.get(fragmentList.size() - 1);
-    		//System.out.println("**thisChar: " + thisChar);
+//    		System.out.println("**thisChar: " + thisChar);
     		//System.out.println("lastFragment: " + lastFragment);
     		
     		// TODO: this lovely overprint code doesn't work on

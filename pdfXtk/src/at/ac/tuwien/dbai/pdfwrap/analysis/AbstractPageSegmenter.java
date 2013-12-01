@@ -56,22 +56,13 @@ import at.ac.tuwien.dbai.pdfwrap.utils.SegmentUtils;
 import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
 
 /**
- * Page segmentation methods
+ * Abstract page segmenter framework for implementation
+ * of page segmentation algorithms
  * 
  * @author Tamir Hassan, pdfanalyser@tamirhassan.com
  * @version PDF Analyser 0.9
  */
 public abstract class AbstractPageSegmenter {
-	// passed variable at the mo... HashMap vertNeighbourMap;
-	// AdjacencyGraph ng;
-	// HashMap colHash;
-	// EdgeList edges;
-	// the following line commented out 6.08.08, due to first- and second-level
-	// clusterers requiring their own local variables
-	// EdgeList priorityEdges;
-	// SegmentList waitingList;
-
-	// ISegmentationRules rules;
 
 	protected int maxIterations = Integer.MAX_VALUE;
 
@@ -118,15 +109,8 @@ public abstract class AbstractPageSegmenter {
 				if (!values.contains(item))
 					return true;
 			}
-			// System.out.println("same size:");
-			// System.out.println("cols: " + cols.size());
-			// System.out.println("values: " + values.size());
 			return false;
 		} else {
-			// System.out.println("different size:");
-			// System.out.println("cols: " + cols.size());
-			// System.out.println("values: " + values.size());
-
 			return true;
 		}
 	}
@@ -721,173 +705,6 @@ public abstract class AbstractPageSegmenter {
 			}
 		}
 	}
-
-	/*
-	 * protected void updateHashes(CandidateCluster c, List<CandidateCluster>
-	 * callingRetVal, boolean performNeighbourFinding) { // c instanceof Cluster
-	 * 
-	 * // System.out.println("in updateHashes with c: " + c.toExtendedString());
-	 * 
-	 * // System.out.println("in updateHashes with pnf: " +
-	 * performNeighbourFinding);
-	 * 
-	 * long t = System.currentTimeMillis();
-	 * 
-	 * // go through all swallowedItems // if not part of c.items & if not
-	 * newSegment // if unused, add to c // if used, look them up in colHash &
-	 * merge col with c
-	 * 
-	 * // System.out.println("newSegment: " + newSegment); //
-	 * System.out.println("adding to cluster c: " + c.toExtendedString());
-	 * 
-	 * //Cluster c = new Cluster();
-	 * 
-	 * Iterator siIter = c.getItems().iterator(); while(siIter.hasNext()) {
-	 * TextSegment ts = (TextSegment)siIter.next();
-	 * 
-	 * if (clustHash.get(ts) != null) // item belongs to another cluster {
-	 * 
-	 * CandidateCluster clust = (CandidateCluster)clustHash.get(ts);
-	 * //c.getItems().addAll(clust.getItems()); Iterator itemIter =
-	 * clust.getItems().iterator(); while(itemIter.hasNext()) { TextSegment item
-	 * = (TextSegment)itemIter.next(); clustHash.remove(item); // all of the
-	 * items within the cluster should already be // in the list of
-	 * swallowedItems... // clustHash.put(item, c); callingRetVal.remove(clust);
-	 * } }
-	 * 
-	 * clustHash.put(ts, c);
-	 * 
-	 * } callingRetVal.add(c);
-	 * 
-	 * // System.out.println("in updateHashes with pnf2: " +
-	 * performNeighbourFinding);
-	 * 
-	 * t = System.currentTimeMillis();
-	 * 
-	 * if (performNeighbourFinding) { // if skipNeighbourFinding: // c is a new
-	 * cluster with 2 sub-elements // as the situation is uncomplicated (swallow
-	 * is not allowed, // else no cluster generation), we do not need to move
-	 * edges around. At all.
-	 * 
-	 * // find lowest neighbourAbove and highest neighbourBelow TextSegment
-	 * lowestNeighbourAbove = null; TextSegment highestNeighbourBelow = null;
-	 * 
-	 * 
-	 * 
-	 * // if size one, no need even to do this
-	 * 
-	 * List<GenericSegment> foo = findNearestVerticalNeighbours (c, allEdges,
-	 * vertNeighbourMap);
-	 * 
-	 * // System.out.println("STh findNVN " + (System.currentTimeMillis() - t));
-	 * t = System.currentTimeMillis();
-	 * 
-	 * lowestNeighbourAbove = (TextSegment)foo.get(0); highestNeighbourBelow =
-	 * (TextSegment)foo.get(1);
-	 * 
-	 * // System.out.println("lowestNeighbourAbove: " + lowestNeighbourAbove);
-	 * // System.out.println("highestNeighbourBelow: " + highestNeighbourBelow);
-	 * 
-	 * // if neighbours are the same, no need to look further
-	 * 
-	 * // now we have found the lowest neighbourAbove and // highest
-	 * neighbourBelow :)
-	 * 
-	 * // convert foundLines to new items -- no, don't, it's too complicated //
-	 * particularly with regards to left and right...
-	 * 
-	 * // find the top item and bottom item, which matches the font size of its
-	 * found line // pre: lines have been found already AND sort has taken place
-	 * Collections.sort(c.getItems(), new YComparator());
-	 * 
-	 * // System.out.println("STh sort " + (System.currentTimeMillis() - t)); t
-	 * = System.currentTimeMillis();
-	 * 
-	 * // these could conceivably be NULL, which would cause the algorithm to
-	 * CRASH! //TextSegment topItem = (TextSegment) c.getItems().getFirst();
-	 * TextSegment topItem = (TextSegment)
-	 * c.getTopElementMatchingFontsizeAfterSorting(); //TextSegment bottomItem =
-	 * (TextSegment) c.getItems().getLast(); TextSegment bottomItem =
-	 * (TextSegment) c.getBottomElementMatchingFontsizeAfterSorting();
-	 * 
-	 * // System.out.println("c.getFontSize(): " + c.getFontSize());
-	 * 
-	 * // System.out.println("c.getFoundLines(): " + c.getFoundLines());
-	 * 
-	 * // System.out.println("topItem: " + topItem); //
-	 * System.out.println("bottomItem: " + bottomItem);
-	 * 
-	 * // System.out.println("STh get top & bottom elements " +
-	 * (System.currentTimeMillis() - t)); t = System.currentTimeMillis();
-	 * 
-	 * // TODO: what if there are no items at all? Could crash here... if
-	 * (topItem != null && bottomItem != null) { // connect these to their
-	 * respective neighbouring elements // TODO: speedup -- if new edge already
-	 * exists... if (highestNeighbourBelow != null) // in this loop, about 100ms
-	 * lost { // System.out.println("in highestNeighbourBelow section"); //
-	 * don't have to worry about symmetrical edges AdjacencyEdge edgeToAdd = new
-	 * AdjacencyEdge (bottomItem, highestNeighbourBelow,
-	 * AdjacencyEdge.REL_BELOW); // remove edges between highestNeighbourBelow
-	 * and other items in segment long st = System.currentTimeMillis(); t =
-	 * System.currentTimeMillis(); List<AdjacencyEdge<GenericSegment>>
-	 * edgesToRemove = new ArrayList<AdjacencyEdge<GenericSegment>>(); Iterator
-	 * i = priorityEdges.iterator(); while(i.hasNext()) { AdjacencyEdge ae =
-	 * (AdjacencyEdge)i.next(); if (ae.isVertical()) { if (ae.getNodeFrom() ==
-	 * highestNeighbourBelow) { if (c.getItems().contains(ae.getNodeTo())) { //
-	 * System.out.println("1removing existing edge: " + ae);
-	 * edgesToRemove.add(ae); } } else if (ae.getNodeTo() ==
-	 * highestNeighbourBelow) { if (c.getItems().contains(ae.getNodeFrom())) {
-	 * // System.out.println("2removing existing edge: " + ae);
-	 * edgesToRemove.add(ae); } } } } priorityEdges.removeAll(edgesToRemove);
-	 * 
-	 * // System.out.println("STh whole process " + (System.currentTimeMillis()
-	 * - st)); // TODO: add in sequence, don't just add anywhere and sort ;) //
-	 * System.out.println("3adding in sequence: " + edgeToAdd); //
-	 * priorityEdges.addInSequence(edgeToAdd, new EdgeAttributeComparator());
-	 * 
-	 * priorityEdges.add(edgeToAdd); Collections.sort(priorityEdges, new
-	 * EdgeAttributeComparator());
-	 * 
-	 * } // System.out.println("o107: " + System.currentTimeMillis()); if
-	 * (lowestNeighbourAbove != null) // in this loop, about 90ms lost { //
-	 * System.out.println("in lowestNeighbourAbove section"); // don't have to
-	 * worry about symmetrical edges AdjacencyEdge edgeToAdd = new AdjacencyEdge
-	 * (topItem, lowestNeighbourAbove, AdjacencyEdge.REL_ABOVE); // remove edges
-	 * between highestNeighbourBelow and other items in segment
-	 * List<AdjacencyEdge<GenericSegment>> edgesToRemove = new
-	 * ArrayList<AdjacencyEdge<GenericSegment>>(); Iterator i =
-	 * priorityEdges.iterator(); while(i.hasNext()) { AdjacencyEdge ae =
-	 * (AdjacencyEdge)i.next(); if (ae.isVertical()) { if (ae.getNodeFrom() ==
-	 * lowestNeighbourAbove) { if (c.getItems().contains(ae.getNodeTo())) { //
-	 * System.out.println("4removing existing edge: " + ae);
-	 * edgesToRemove.add(ae); } } else if (ae.getNodeTo() ==
-	 * lowestNeighbourAbove) { if (c.getItems().contains(ae.getNodeFrom())) { //
-	 * System.out.println("5removing existing edge: " + ae);
-	 * edgesToRemove.add(ae); } } } } priorityEdges.removeAll(edgesToRemove);
-	 * 
-	 * // TODO: add in sequence, don't just add anywhere and sort ;) //
-	 * System.out.println("6adding in sequence: " + edgeToAdd); //
-	 * priorityEdges.addInSequence(edgeToAdd, new EdgeAttributeComparator());
-	 * 
-	 * priorityEdges.add(edgeToAdd); Collections.sort(priorityEdges, new
-	 * EdgeAttributeComparator()); } } // System.out.println("STh finished " +
-	 * (System.currentTimeMillis() - t)); t = System.currentTimeMillis(); //
-	 * System.out.println("o108: " + System.currentTimeMillis()); // prob.
-	 * unnecessary to worry about removing other connections...??? better to do
-	 * it
-	 * 
-	 * // any comparisons should compare to cluster, and not just to the segment
-	 * :) // this also allows comparisons with e.g. alignment and width
-	 * 
-	 * 
-	 * // map nearest up-edge (nearest neighbour) to top component (line) // and
-	 * nearest down-edge (nn) to bottom component (line) // this way the line
-	 * spacing/font size matches :) // any newly-created edges must be added in
-	 * order, irrespective of whether they have been already visited? //
-	 * (unlikely that they would have been visited if the ordering is correct)
-	 * -- otherwise they are already gone! // so, the method requires: // edge
-	 * list (priorityEdges) // and that's all? :) } }
-	 */
 
 	protected static List<GenericSegment> findNearestVerticalNeighbours(
 			GenericSegment c, List<AdjacencyEdge<GenericSegment>> allEdges,

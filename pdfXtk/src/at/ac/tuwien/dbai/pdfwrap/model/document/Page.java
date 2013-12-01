@@ -122,6 +122,16 @@ public class Page extends CompositeSegment<GenericSegment> implements IXHTMLSegm
         }
     }
     
+    @Override
+    public List<AttributeTuple> getAttributes() {
+
+    	List<AttributeTuple> attList = super.getAttributes();
+    	
+    	attList.add(new AttributeTuple("pageNo", pageNo));
+    	
+    	return attList;
+    }
+    
     /**
      * @return Returns the pageNo.
      */
