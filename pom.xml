@@ -7,6 +7,24 @@
     <artifactId>pdfXtk-parent</artifactId>
     <version>0.9-SNAPSHOT</version>
 
+    <issueManagement>
+        <url>https://github.com/tamirhassan/pdfxtk/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>Apache License</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/tamirhassan/pdfxtk</url>
+        <connection>scm:git:git://github.com/tamirhassan/pdfxtk.git</connection>
+        <developerConnection>scm:git:git@github.com:tamirhassan/pdfxtk.git</developerConnection>
+    </scm>
 
     <properties>
         <pdfbox.version>1.8.1</pdfbox.version>
@@ -159,7 +177,7 @@
                 <version>2.9.1</version>
                 <configuration>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <configLocation>${parent-path}/checkstyle.xml</configLocation>
+                    <configLocation>../checkstyle.xml</configLocation>
                 </configuration>
             </plugin>
 
