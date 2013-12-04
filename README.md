@@ -4,6 +4,10 @@ pdfxtk
 PDF Extraction Toolkit
 
 
+= logging
+please use commons.logging
+
+
 = troubleshooting
 
 to install a file into local maven repository:

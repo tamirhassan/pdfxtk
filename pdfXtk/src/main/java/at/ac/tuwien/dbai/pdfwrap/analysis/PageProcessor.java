@@ -40,6 +40,8 @@ import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFObjectExtractor;
 import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFPage;
 import at.ac.tuwien.dbai.pdfwrap.utils.ListUtils;
 import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -53,8 +55,9 @@ import java.util.*;
  * @author @author Ben Litchfield (ben@csh.rit.edu)
  * @version PDF Analyser 0.9
  */
-public class PageProcessor // extends PDFStreamEngine
-{
+public class PageProcessor {
+    private static final Log log = LogFactory.getLog( PageProcessor.class );
+
 	// types of clustering -- while clustering is still being perfected...
 //	public final static int PP_MONOSPACE = 0;	//seems to be catered for by PP_BMW
 	public final static int PP_INSTRUCTION = 1;
@@ -206,19 +209,27 @@ public class PageProcessor // extends PDFStreamEngine
        
         rop = new RulingObjectProcessor();
         
-        if (Utils.DISPLAY_TIMINGS)
-        	System.out.println("time A: " + (System.currentTimeMillis() - startProcess));
-        
+
+        if (Utils.DISPLAY_TIMINGS) {
+            if( log.isDebugEnabled() ) {
+                log.debug( ("time A: " + ( System.currentTimeMillis() - startProcess ) ));
+            }
+        }
+
         PDFObjectExtractor.removeLeadingTrailingSpaces(fragList);
         
 //        if (processType == PP_STRUCT)
 //        	PageSegmenter.LINE_SPACING_TOLERANCE = 0.20f;
         
 //        else // lines or coarser granular levels
-        if (processType != PP_CHAR && processType != PP_FRAGMENT)
-        {
-        	if (Utils.DISPLAY_TIMINGS)
-	        	System.out.println("time E: " + (System.currentTimeMillis() - startProcess));
+        if ( processType != PP_CHAR && processType != PP_FRAGMENT ) {
+
+        	if (Utils.DISPLAY_TIMINGS ) {
+                if( log.isDebugEnabled() ) {
+                    log.debug("time E: " + (System.currentTimeMillis() - startProcess));
+                }
+            }
+
         	
         	// added 2011-11-04 to REMOVE space characters (test)
         	if (processSpaces)
@@ -243,18 +254,25 @@ public class PageProcessor // extends PDFStreamEngine
 
 	        AdjacencyGraph<TextLine> lineAG = new AdjacencyGraph<TextLine>();
 	        lineAG.addList(textLines);
-//	        System.out.println("pageitems: " + textLines);
-	        System.out.println("number of items pageFromLines: " + textLines.size());
-	        
-	        if (Utils.DISPLAY_TIMINGS)
-	        	System.out.println("Time for preprocessing: " + (System.currentTimeMillis() - startProcess));
-	        
+
+            if( log.isDebugEnabled() ) {
+                if( log.isDebugEnabled() ) {
+                    log.debug( "number of items pageFromLines: " + textLines.size() );
+                    log.debug("Time for preprocessing: " + (System.currentTimeMillis() - startProcess));
+                }
+            }
+
+
 	        // Generate NG
 	        long before = System.currentTimeMillis();
 	        lineAG.generateEdgesSingle();
-	        if (Utils.DISPLAY_TIMINGS)
-	        	System.out.println("Time for AG generation: " + (System.currentTimeMillis() - before));
-	        
+
+            if( Utils.DISPLAY_TIMINGS ) {
+                if( log.isDebugEnabled() ) {
+                    log.debug( "Time for AG generation: " + (System.currentTimeMillis() - before));
+                }
+            }
+
 	        before = System.currentTimeMillis();
 	        // RULING OBJECT PROCESSING
 	        if(rulingLines)
@@ -293,9 +311,12 @@ public class PageProcessor // extends PDFStreamEngine
 //	        HashMap<GenericSegment, CandidateCluster> clustHash =
 //	        	tbps.getClustHash();
 	        
-        	if (Utils.DISPLAY_TIMINGS)
-	        	System.out.println("Time for ordered edge cluster: " + (System.currentTimeMillis() - before));
-        	
+        	if (Utils.DISPLAY_TIMINGS){
+                if( log.isDebugEnabled() ) {
+                    log.debug("Time for ordered edge cluster: " + (System.currentTimeMillis() - before));
+                }
+            }
+
 //        	ListUtils.printListWithSubItems(textBlocks);
         	
         	before = System.currentTimeMillis();
@@ -370,9 +391,12 @@ public class PageProcessor // extends PDFStreamEngine
         		}
         	}
         	
-        	if (Utils.DISPLAY_TIMINGS)
-            	System.out.println("total pp time: " + (System.currentTimeMillis() - startProcess));
-            
+        	if (Utils.DISPLAY_TIMINGS) {
+                if( log.isDebugEnabled() ) {
+                    log.debug( "total pp time: " + (System.currentTimeMillis() - startProcess));
+                }
+            }
+
         	// custom processing goes here
 //        	postProcessing(processType, retVal);
         	
@@ -458,9 +482,13 @@ public class PageProcessor // extends PDFStreamEngine
 //    	        clusterNG.addList(imageList);
 	        adjGraph.generateEdgesSingle();
 	        //GraphMatcher.removeLongEdges(clusterNG, 25.0f);
-	        
-	        System.out.println("PP.edges: " + adjGraph.getEdges().size());
-	        
+
+
+            if( log.isDebugEnabled() ) {
+                log.debug("PP.edges: " + adjGraph.getEdges().size());
+            }
+
+
 	        List<EdgeSegment> edgeList = new ArrayList<EdgeSegment>();
 	        for (AdjacencyEdge<GenericSegment> ae : adjGraph.getEdges())
 //	        	edgeList.add(new EdgeSegment(ae));
