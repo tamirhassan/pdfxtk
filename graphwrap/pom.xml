@@ -9,7 +9,18 @@
         <version>0.9-SNAPSHOT</version>
     </parent>
 
-    <artifactId>pdfXtk</artifactId>
+    <artifactId>graphwrap</artifactId>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.touchgraph</groupId>
+            <artifactId>TGWikiBrowser</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+    </dependencies>
 
 
     <build>

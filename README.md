@@ -8,3 +8,7 @@ PDF Extraction Toolkit
 
 to install a file into local maven repository:
 mvn install:install-file -DgroupId=com.touchgraph -DartifactId=touchgraph-mod -Dversion=1.0 -Dpackaging=jar -Dfile=${your.file}
+
+
+# touchgraph
+TODO: what is it ?
