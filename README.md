@@ -12,3 +12,12 @@ mvn install:install-file -DgroupId=com.touchgraph -DartifactId=touchgraph-mod -D
 
 # touchgraph
 TODO: what is it ?
+
+
+
+# sonar
+you need to install sonar locally: http://www.sonarqube.org/downloads/
+after that adopt the property 'sonar.host.url' in parent pom.xml
+
+to run use:
+mvn sonar:sonar
