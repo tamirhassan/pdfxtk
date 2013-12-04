@@ -49,13 +49,16 @@
 
 package com.touchgraph.graphlayout;
 
-import  com.touchgraph.graphlayout.interaction.*;
-import  com.touchgraph.graphlayout.graphelements.*;
+import com.touchgraph.graphlayout.graphelements.*;
+import com.touchgraph.graphlayout.interaction.GLEditUI;
+import com.touchgraph.graphlayout.interaction.TGAbstractClickUI;
 
-import  java.awt.*;
-import  java.awt.event.*;
-import  javax.swing.*;
-import  java.util.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Vector;
 
 /** TGPanel contains code for drawing the graph, and storing which nodes
   * are selected, and which ones the mouse is over.

@@ -31,33 +31,6 @@
  */
 package at.ac.tuwien.dbai.pdfwrap;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.log4j.Logger;
-import org.apache.pdfbox.exceptions.CryptographyException;
-import org.apache.pdfbox.exceptions.InvalidPasswordException;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XMLSerializer;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 import at.ac.tuwien.dbai.pdfwrap.analysis.PageProcessor;
 import at.ac.tuwien.dbai.pdfwrap.exceptions.DocumentProcessingException;
 import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
@@ -67,6 +40,23 @@ import at.ac.tuwien.dbai.pdfwrap.model.graph.AdjacencyGraph;
 import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFObjectExtractor;
 import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFPage;
 import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
+import org.apache.log4j.Logger;
+import org.apache.pdfbox.exceptions.CryptographyException;
+import org.apache.pdfbox.exceptions.InvalidPasswordException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.xml.serialize.OutputFormat;
+import org.apache.xml.serialize.XMLSerializer;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**

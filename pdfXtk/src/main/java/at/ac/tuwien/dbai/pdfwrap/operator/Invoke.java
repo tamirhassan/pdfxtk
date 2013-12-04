@@ -31,14 +31,7 @@
  */
 package at.ac.tuwien.dbai.pdfwrap.operator;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
+import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFObjectExtractor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.cos.COSName;
@@ -52,7 +45,6 @@ import org.apache.pdfbox.util.Matrix;
 import org.apache.pdfbox.util.PDFOperator;
 import org.apache.pdfbox.util.operator.OperatorProcessor;
 
-import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFObjectExtractor;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
