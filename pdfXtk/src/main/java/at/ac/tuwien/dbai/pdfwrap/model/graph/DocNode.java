@@ -1,15 +1,19 @@
 package at.ac.tuwien.dbai.pdfwrap.model.graph;
 
-import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
-import at.ac.tuwien.dbai.pdfwrap.model.document.TextSegment;
-import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
 import com.touchgraph.graphlayout.TGPanel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.awt.*;
+import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
+import at.ac.tuwien.dbai.pdfwrap.model.document.TextSegment;
+import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
 
 
 /**

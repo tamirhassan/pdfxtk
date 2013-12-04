@@ -45,6 +45,7 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.encryption.PDEncryptionDictionary;
 import org.apache.pdfbox.pdmodel.encryption.PDStandardEncryption;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceDictionary;
@@ -173,7 +174,7 @@ public class PDFObjectExtractor extends PDFStreamEngine
     	// 100904 don't know what this parameter means, but was set to false before...
     	
 //    	super( ResourceLoader.loadProperties( Utils.getRootDir() + "/Resources/PDFObjectExtractor.properties", false ) );
-    	super( ResourceLoader.loadProperties( "Resources/PDFObjectExtractor.properties", false ) );
+    	super( ResourceLoader.loadProperties( "PDFObjectExtractor.properties", false ) );
     }
 
     /**
@@ -1976,10 +1977,18 @@ end commented out 1.1 */
 		//}
 	}
 
-	public void simpleDrawImage(float x1, float x2, float y1, float y2)
-	{
-		ImageSegment newImageSegment = new ImageSegment
-			(x1, x2, y1, y2);
+
+    /**
+     * TODO: extract byte[] from img and add it to ImageSegment
+     *
+     * @param x1
+     * @param x2
+     * @param y1
+     * @param y2
+     * @param img
+     */
+	public void simpleDrawImage(float x1, float x2, float y1, float y2, PDXObjectImage img ) {
+		ImageSegment newImageSegment = new ImageSegment(x1, x2, y1, y2);
 			//(ctm.getXPosition(), ctm.getXPosition() + (float)twh.getX(), 
 				//ctm.getYPosition(), ctm.getYPosition() + (float)twh.getY());
 /////		System.out.println("adding image segment: " + newImageSegment);

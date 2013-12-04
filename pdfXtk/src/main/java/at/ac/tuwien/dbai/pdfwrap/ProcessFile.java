@@ -31,15 +31,24 @@
  */
 package at.ac.tuwien.dbai.pdfwrap;
 
-import at.ac.tuwien.dbai.pdfwrap.analysis.PageProcessor;
-import at.ac.tuwien.dbai.pdfwrap.exceptions.DocumentProcessingException;
-import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
-import at.ac.tuwien.dbai.pdfwrap.model.document.IXHTMLSegment;
-import at.ac.tuwien.dbai.pdfwrap.model.document.Page;
-import at.ac.tuwien.dbai.pdfwrap.model.graph.AdjacencyGraph;
-import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFObjectExtractor;
-import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFPage;
-import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.log4j.Logger;
 import org.apache.pdfbox.exceptions.CryptographyException;
 import org.apache.pdfbox.exceptions.InvalidPasswordException;
@@ -49,14 +58,15 @@ import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import at.ac.tuwien.dbai.pdfwrap.analysis.PageProcessor;
+import at.ac.tuwien.dbai.pdfwrap.exceptions.DocumentProcessingException;
+import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
+import at.ac.tuwien.dbai.pdfwrap.model.document.IXHTMLSegment;
+import at.ac.tuwien.dbai.pdfwrap.model.document.Page;
+import at.ac.tuwien.dbai.pdfwrap.model.graph.AdjacencyGraph;
+import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFObjectExtractor;
+import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFPage;
+import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
 
 
 /**
@@ -126,6 +136,8 @@ public class ProcessFile
     	List<AdjacencyGraph<GenericSegment>> adjGraphList, boolean GUI)
         throws DocumentProcessingException
     {
+
+
         boolean toConsole = false;
         if (password == null)
             password = "";
@@ -318,7 +330,22 @@ public class ProcessFile
         
         return resultDocument;
     }
-    
+
+
+    /**
+     *
+     * @param theFile as byte array
+     * @param pp bring in the pageProcessor implementation
+     * @param toXHTML whether to return xhtml document or XMIllum visualization format
+     * @param borders adds border to table cell in output format - works only when toXHTML true
+     * @param startPage The first page to start extraction(1 based)
+     * @param endPage The last page to extract(inclusive)
+     * @param encoding (ISO-8859-1,UTF-16BE,UTF-16LE,...)
+     * @param password Password to decrypt document
+     *
+     * @return new instance of dom document representing the processing results
+     * @throws DocumentProcessingException
+     */
     public static org.w3c.dom.Document processPDFToXMLDocument(byte[] theFile,
     	PageProcessor pp, boolean toXHTML, boolean borders,
     	int startPage, int endPage, String encoding, String password)

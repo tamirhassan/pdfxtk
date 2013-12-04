@@ -31,13 +31,22 @@
  */
 package at.ac.tuwien.dbai.pdfwrap.pdfread;
 
+<<<<<<< HEAD:pdfXtk/src/main/java/at/ac/tuwien/dbai/pdfwrap/pdfread/PDFPage.java
+=======
+import java.util.Iterator;
+import java.util.List;
+
+>>>>>>> ae4941ebc57aaf80230204793e517115bd5bdce4:pdfXtk/src/main/java/at/ac/tuwien/dbai/pdfwrap/pdfread/PDFPage.java
 import at.ac.tuwien.dbai.pdfwrap.model.document.CompositeSegment;
 import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
 import at.ac.tuwien.dbai.pdfwrap.model.document.TextSegment;
 
+<<<<<<< HEAD:pdfXtk/src/main/java/at/ac/tuwien/dbai/pdfwrap/pdfread/PDFPage.java
 import java.util.Iterator;
 import java.util.List;
 
+=======
+>>>>>>> ae4941ebc57aaf80230204793e517115bd5bdce4:pdfXtk/src/main/java/at/ac/tuwien/dbai/pdfwrap/pdfread/PDFPage.java
 
 /**
  * Element to represent the intermediary page, after

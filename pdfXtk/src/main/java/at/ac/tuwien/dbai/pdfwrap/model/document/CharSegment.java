@@ -158,14 +158,10 @@ public class CharSegment extends TextSegment
     }
     
     @Override
-    public List<AttributeTuple> getAttributes() {
-    	
-    	List<AttributeTuple> attributeList = super.getAttributes();
-    	
-    	attributeList.add(new AttributeTuple("opindex", sourceOp.getOpIndex()));
-    	attributeList.add(new AttributeTuple("argindex", sourceOp.getArgIndex()));
-    	
-    	return attributeList;
+    public String getAttributes() {
+    	// TODO Auto-generated method stub
+    	return super.getAttributes() + " opIndex: " + sourceOp.getOpIndex() + 
+    		" argIndex: " + sourceOp.getArgIndex();
     }
     
 	public boolean isOverprint() {

@@ -32,6 +32,10 @@
 package at.ac.tuwien.dbai.pdfwrap.model.document;
 
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import java.util.UUID;
 
 /**
  * ImageSegment document element; represents a (bitmap) image on the page
@@ -39,23 +43,53 @@ package at.ac.tuwien.dbai.pdfwrap.model.document;
  * @author Tamir Hassan, pdfanalyser@tamirhassan.com
  * @version PDF Analyser 0.9
  */
-public class ImageSegment extends GenericSegment
-{
-	/**
+public class ImageSegment extends GenericSegment implements IXHTMLSegment {
+
+    protected byte[] imageData;
+
+    protected UUID uuid = UUID.randomUUID();
+
+
+    public ImageSegment(float x1, float x2, float y1, float y2) {
+        this(x1, x2, y1, y2, null);
+    }
+
+
+    /**
      * Constructor.
      *
-     * @param x1 The x1 coordinate of the segment.
-     * @param x2 The x2 coordinate of the segment.
-     * @param y1 The y1 coordinate of the segment.
-     * @param y2 The y2 coordinate of the segment.
+     * @param x1 The x1 coordinate of the segments bounding box.
+     * @param x2 The x2 coordinate of the segments bounding box.
+     * @param y1 The y1 coordinate of the segments bounding box.
+     * @param y2 The y2 coordinate of the segments bounding box.
      */
     public ImageSegment(
         float x1,
         float x2,
         float y1,
-        float y2
+        float y2,
+        byte[] imageData
         )
     {
 		super(x1, x2, y1, y2);
+        this.imageData = imageData;
+    }
+
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+
+    @Override
+    public void addAsXHTML(Document resultDocument, Element parent) {
+        Element newImgElement = resultDocument.createElement("img");
+        newImgElement.setAttribute( "src", uuid.toString() + ".png");
+        newImgElement.setAttribute( "width", "" + getWidth());
+        newImgElement.setAttribute( "height", "" + getHeight());
     }
 }

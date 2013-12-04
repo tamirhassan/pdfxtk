@@ -31,7 +31,16 @@
  */
 package at.ac.tuwien.dbai.pdfwrap.operator;
 
-import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFObjectExtractor;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.cos.COSStream;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -43,6 +52,7 @@ import org.apache.pdfbox.util.Matrix;
 import org.apache.pdfbox.util.PDFOperator;
 import org.apache.pdfbox.util.operator.OperatorProcessor;
 
+import at.ac.tuwien.dbai.pdfwrap.pdfread.PDFObjectExtractor;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -58,8 +68,10 @@ import java.util.Map;
  * @author Tamir Hassan, pdfanalyser@tamirhassan.com
  * @version PDF Analyser 0.9
  */
-public class Invoke extends OperatorProcessor
-{
+public class Invoke extends OperatorProcessor {
+    private static final Log log = LogFactory.getLog(  Invoke.class );
+
+
     /**
      * process : re : append rectangle to path.
      * @param operator The operator that is being executed.
@@ -75,6 +87,8 @@ public class Invoke extends OperatorProcessor
         COSName objectName = (COSName)arguments.get( 0 );
         Map xobjects = drawer.getResources().getXObjects();
         PDXObject xobject = (PDXObject)xobjects.get( objectName.getName() );
+
+
         if( xobject instanceof PDXObjectImage )
         {
 /////        	System.out.println("JUHU PDXObjectImage");
@@ -155,33 +169,17 @@ public class Invoke extends OperatorProcessor
                 
                 drawer.simpleDrawImage((float)at.getTranslateX(), 
                     	(float)(at.getTranslateX()+(width*scaleX)),
-                    	(float)at.getTranslateY(), (float)(at.getTranslateY()+(height*scaleY)));
+                    	(float)at.getTranslateY(), (float)(at.getTranslateY()+(height*scaleY)), image );
                 
-                BufferedImage
-            	awtImage = image.getRGBImage();
-	            //}
-	            //catch (Exception e)
-	            //{
-	            //	e.printStackTrace();
-	            //}
-	            
-	            if (awtImage == null) {
-	                return;//TODO PKOCH
-	            }
-            
+                BufferedImage awtImage = image.getRGBImage();
                 graphics.drawImage( awtImage, at, null );
             }
-            catch( Exception e )
-            {
-                e.printStackTrace();
+            catch( Exception e ) {
+                log.error( "failed to invoke image: " + operator, e  );
             }
-            catch( Error err )
-            {
-            	err.printStackTrace();
-            }
+
         }
-        else if(xobject instanceof PDXObjectForm)
-        {
+        else if( xobject instanceof PDXObjectForm) {
             PDXObjectForm form = (PDXObjectForm)xobject;
             COSStream invoke = (COSStream)form.getCOSObject();
             PDResources pdResources = form.getResources();
@@ -192,12 +190,9 @@ public class Invoke extends OperatorProcessor
 
             getContext().processSubStream( page, pdResources, invoke );
         }
-        else
-        {
-            //unknown xobject type
+        else {
+            throw new RuntimeException( "unsupported type: " + xobject );
+
         }
-        
-        
-        //invoke named object.
     }
 }
