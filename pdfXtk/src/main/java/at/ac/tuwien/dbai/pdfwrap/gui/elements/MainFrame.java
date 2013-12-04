@@ -22,6 +22,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,20 +62,30 @@ public class MainFrame extends JFrame {
 	 * @param args
 	 * @throws IllegalArgumentException 
 	 */
-	public static void main(String[] args) throws IllegalArgumentException {
-		
-		new MainFrame();
+	public static void main(String[] args) throws IllegalArgumentException, URISyntaxException {
+        URL url = MainFrame.class.getClassLoader().getResource("guiConfig.xml");
+        String configFile = new File( url.toURI() ).getAbsolutePath();
+
+        if( args.length > 0 ) {
+            configFile = args[ 0 ];
+        }
+
+        System.out.println( "loading config: " + configFile );
+		new MainFrame( configFile );
 	}
+
+
 	
 	/**
 	 * Constructor method for creating the main frame of the GUI
+     * @param configFile
 	 */
-	public MainFrame() {
+	public MainFrame( String configFile ) {
 		
 		//Reading the XML styling sheet
 		try {
 			
-			styleMap = XMLLayerLoader.readXML();
+			styleMap = XMLLayerLoader.readXML( configFile );
 			
 		} catch (Exception e) {
 			

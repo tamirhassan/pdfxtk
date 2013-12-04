@@ -25,9 +25,7 @@ import java.util.HashMap;
  *
  */
 public class XMLLayerLoader {
-	
-	//Path for the xml file
-	private final static String xmlFilePath = "layer.xml";
+
 	
 	/**
 	 * Parses the xml file and creates style objects for each layer specified.
@@ -38,7 +36,7 @@ public class XMLLayerLoader {
 	 * @throws IOException
 	 * @throws IllegalArgumentException
 	 */
-	public static HashMap<String,Style> readXML() throws ParserConfigurationException, SAXException, IOException, IllegalArgumentException {
+	public static HashMap<String,Style> readXML( String xmlFilePath ) throws ParserConfigurationException, SAXException, IOException, IllegalArgumentException {
 		
 		HashMap<String,Style> ret = new HashMap<String,Style>();
 			
