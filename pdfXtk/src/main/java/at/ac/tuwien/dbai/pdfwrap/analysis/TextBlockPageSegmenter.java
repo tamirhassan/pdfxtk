@@ -31,6 +31,7 @@
  */
 package at.ac.tuwien.dbai.pdfwrap.analysis;
 
+
 import at.ac.tuwien.dbai.pdfwrap.comparators.EdgeAttributeComparator;
 import at.ac.tuwien.dbai.pdfwrap.model.document.CompositeSegment;
 import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
@@ -72,7 +73,7 @@ public class TextBlockPageSegmenter extends AbstractPageSegmenter
 	    */
 	    
 	// TODO: only vertical edges actually need to be passed here...?
-	public int clusterTogether(AdjacencyEdge<GenericSegment> ae, 
+	public int clusterTogether(AdjacencyEdge<GenericSegment> ae,
 		CandidateCluster clustFrom, CandidateCluster clustTo) 
 	{
 		TextSegment segFrom = (TextSegment)ae.getNodeFrom();
