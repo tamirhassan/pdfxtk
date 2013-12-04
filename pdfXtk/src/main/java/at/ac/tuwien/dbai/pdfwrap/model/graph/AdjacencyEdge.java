@@ -36,6 +36,8 @@ import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
 import at.ac.tuwien.dbai.pdfwrap.model.document.TextSegment;
 import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
 
+import java.io.Serializable;
+
 /*
 import edu.uci.ics.jung.graph.impl.SimpleUndirectedSparseVertex;
 */
@@ -46,8 +48,9 @@ import edu.uci.ics.jung.graph.impl.SimpleUndirectedSparseVertex;
  * @author Tamir Hassan, pdfanalyser@tamirhassan.com
  * @version PDF Analyser 0.9
  */
-public class AdjacencyEdge<T extends GenericSegment> //extends Edge
-{
+public class AdjacencyEdge<T extends GenericSegment> implements Serializable {
+    private static final long serialVersionUID = 1L;
+
 	protected T nodeFrom, nodeTo;
 	
     public static final int REL_LEFT = 0;
@@ -77,6 +80,7 @@ public class AdjacencyEdge<T extends GenericSegment> //extends Edge
      * Constructor.
      *
      * @param todo: add parameters :)
+     *
      */
     
     public AdjacencyEdge(T nodeFrom, T nodeTo, int direction)
@@ -470,6 +474,8 @@ public class AdjacencyEdge<T extends GenericSegment> //extends Edge
         this.direction = direction;
     }
 
+
+
     
     public String toString()
     {
@@ -490,5 +496,4 @@ public class AdjacencyEdge<T extends GenericSegment> //extends Edge
 	{
 		this.ruled = ruled;
 	}
-
 }

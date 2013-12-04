@@ -294,7 +294,6 @@ public class ProcessFile
 	                newPageElement.setAttribute("page_number", Integer.toString(pageNo));
 	                //we want to use the MediaBox!
 	                //resultPage.findBoundingBox();
-	                // System.out.println("Result page: " + resultPage);
 	                
 	                resultPage.addAsXmillum(resultDocument, newPageElement, 
 		                	resultPage, Utils.XML_RESOLUTION);
@@ -552,9 +551,9 @@ public class ProcessFile
                 output = new OutputStreamWriter(
                     new FileOutputStream( outFile ) );
             }
-            //System.out.println("using out put file: " + outFile);
         }
-        //System.out.println("resultDocument: " + resultDocument);
+
+
         serializeXML(resultDocument, output);
         
         if( output != null )

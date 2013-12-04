@@ -38,6 +38,8 @@ import at.ac.tuwien.dbai.pdfwrap.model.graph.AdjacencyGraph;
 import at.ac.tuwien.dbai.pdfwrap.utils.ListUtils;
 import at.ac.tuwien.dbai.pdfwrap.utils.SegmentUtils;
 import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 
@@ -49,6 +51,7 @@ import java.util.*;
  * @version PDF Analyser 0.9
  */
 public abstract class AbstractPageSegmenter {
+    private static final Log log = LogFactory.getLog( AbstractPageSegmenter.class );
 
 	protected int maxIterations = Integer.MAX_VALUE;
 

@@ -377,7 +377,6 @@ public class TextBlockPageSegmenter extends AbstractPageSegmenter
 	}
 
 	public Comparator<AdjacencyEdge<? extends GenericSegment>> edgeComparator() {
-		// TODO Auto-generated method stub
 		return new EdgeAttributeComparator();
 	}
 	

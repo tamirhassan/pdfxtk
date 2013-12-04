@@ -35,6 +35,7 @@ import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
 import at.ac.tuwien.dbai.pdfwrap.model.document.TextSegment;
 import at.ac.tuwien.dbai.pdfwrap.model.graph.AdjacencyEdge;
 import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.util.Comparator;
 
@@ -44,17 +45,24 @@ import java.util.Comparator;
  */
 public class EdgeAttributeComparator implements Comparator<AdjacencyEdge<? extends GenericSegment>>
 {
-	public int compare(AdjacencyEdge<? extends GenericSegment> ae1,
-		AdjacencyEdge<? extends GenericSegment> ae2)
-	{
-		// > means 'before'
-		
-		// shorter edge (line spacing) > longer edge
-		// smaller width difference > larger width difference (forget about alignment for now)
-		// smaller font > larger font
-		// same font size > differing font sizes
-		// edges that contain non-text segments
-		
+
+
+    /**
+     * TODO: check correctness of:
+     * > means 'before'
+     * shorter edge (line spacing) > longer edge
+     * smaller width difference > larger width difference (forget about alignment for now)
+     * smaller font > larger font
+     * same font size > differing font sizes
+     * edges that contain non-text segments
+     *
+     * @param ae1
+     * @param ae2
+     *
+     * @return
+     */
+	public int compare(AdjacencyEdge<? extends GenericSegment> ae1, AdjacencyEdge<? extends GenericSegment> ae2 ) {
+
 		if (ae1.isHorizontal() && ae2.isHorizontal())
 		{
 			int lengthRetVal = (int)((ae1.physicalLength() / ae1.avgFontSize()
@@ -177,8 +185,7 @@ public class EdgeAttributeComparator implements Comparator<AdjacencyEdge<? exten
 		}
 	}
 
-	public boolean equals(Object obj)
-	{
-		return obj.equals(this);
+	public boolean equals( Object obj ) {
+        return EqualsBuilder.reflectionEquals( this, obj );
 	}
 }

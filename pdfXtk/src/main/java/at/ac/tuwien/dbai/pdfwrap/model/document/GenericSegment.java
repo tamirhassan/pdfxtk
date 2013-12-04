@@ -39,6 +39,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,27 +50,30 @@ import java.util.List;
  * @author Tamir Hassan, pdfanalyser@tamirhassan.com
  * @version PDF Analyser 0.9
  */
-public class GenericSegment implements Cloneable, IXmillumSegment 
-{
-	protected float x1, x2, y1, y2;
+public class GenericSegment implements Cloneable, IXmillumSegment, Serializable {
+    private static final long serialVersionUID = 1L;
+
+    protected float x1, x2, y1, y2;
 	boolean zeroSize = false;
 	
-	/**
-	 * Constructor.
-	 * 
-	 * @param x1
-	 *            The x1 coordinate of the segment.
-	 * @param x2
-	 *            The x2 coordinate of the segment.
-	 * @param y1
-	 *            The y1 coordinate of the segment.
-	 * @param y2
-	 *            The y2 coordinate of the segment.
-	 */
-	public GenericSegment()
-	{
+
+	public GenericSegment(){
 	}
-	
+
+
+
+    /**
+     * Constructor.
+     *
+     * @param x1
+     *            The x1 coordinate of the segment.
+     * @param x2
+     *            The x2 coordinate of the segment.
+     * @param y1
+     *            The y1 coordinate of the segment.
+     * @param y2
+     *            The y2 coordinate of the segment.
+     */
 	public GenericSegment(float x1, float x2, float y1, float y2)
 	{
 		this();
