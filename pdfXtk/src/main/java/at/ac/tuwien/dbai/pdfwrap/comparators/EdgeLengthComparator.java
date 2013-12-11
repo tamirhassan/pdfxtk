@@ -33,6 +33,7 @@ package at.ac.tuwien.dbai.pdfwrap.comparators;
 
 import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
 import at.ac.tuwien.dbai.pdfwrap.model.graph.AdjacencyEdge;
+import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
 
 import java.util.Comparator;
 
@@ -47,7 +48,16 @@ public class EdgeLengthComparator implements Comparator<AdjacencyEdge<? extends 
 		{
 			// e2 > e1 => negative result, i.e. e1 comes before e2
 			// sort is in ascending order
-			return (int) (e1.physicalLength() - e2.physicalLength());
+//			return (int) (e1.physicalLength() - e2.physicalLength());
+			
+			if (Utils.within(e1.physicalLength(), e2.physicalLength(), 1.0f))
+				return 0;
+				
+			if (e1.physicalLength() > e2.physicalLength())
+				return 1;
+			else if (e1.physicalLength() == e2.physicalLength())
+				return 0;
+			else return -1;
 		}
 
 		public boolean equals(Object obj)

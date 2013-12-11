@@ -488,7 +488,7 @@ public class ProcessFile
 
         if( outFile == null && inFile.length() >4 )
         {
-            outFile = inFile.substring( 0, inFile.length() -4 ) + ".txt";
+            outFile = inFile.substring( 0, inFile.length() -4 ) + ".html";
         }
         
         // decide whether we have a pdf or image (TODO: command-line override)
@@ -531,6 +531,9 @@ public class ProcessFile
     	resultDocument =
     		processPDFToXMLDocument(inputDoc, pp, toXHTML, borders,
     		startPage, endPage, encoding, password);
+    	
+    	System.out.println("Using input file: " + inFile);
+    	System.out.println("Using output file: " + outFile);
     	
         // now output the XML Document by serializing it to output
         Writer output = null;

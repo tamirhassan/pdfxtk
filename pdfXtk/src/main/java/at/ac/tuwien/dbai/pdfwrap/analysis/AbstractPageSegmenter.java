@@ -32,6 +32,7 @@
 package at.ac.tuwien.dbai.pdfwrap.analysis;
 
 import at.ac.tuwien.dbai.pdfwrap.comparators.YComparator;
+import at.ac.tuwien.dbai.pdfwrap.comparators.EdgeAttributeComparator;
 import at.ac.tuwien.dbai.pdfwrap.model.document.*;
 import at.ac.tuwien.dbai.pdfwrap.model.graph.AdjacencyEdge;
 import at.ac.tuwien.dbai.pdfwrap.model.graph.AdjacencyGraph;
@@ -261,7 +262,7 @@ public abstract class AbstractPageSegmenter {
 				allEdges.add(aegs);
 			}
 		}
-
+		
 		Collections.sort(priorityEdges, edgeComparator());
 		// priorityEdges.removeDuplicateEdges();
 
@@ -274,7 +275,7 @@ public abstract class AbstractPageSegmenter {
 		}
 		priorityEdges.removeAll(edgesToRemove);
 
-		System.out.println("reduced size to: " + priorityEdges.size());
+//		System.out.println("reduced size to: " + priorityEdges.size());
 
 		// added 2011-10-28
 		// initialize vertNeighbourMap -- used by some clusterTogether methods
@@ -289,9 +290,9 @@ public abstract class AbstractPageSegmenter {
 			AdjacencyGraph<? extends GenericSegment> lineAG) {
 		initializeSegmenter(lineAG, null);
 
-		ListUtils.printList(priorityEdges);
+//		ListUtils.printList(priorityEdges);
 
-		System.out.println("allSegments: " + allSegments);
+//		System.out.println("allSegments: " + allSegments);
 		SegmentationResult retInt = processEdges(new SegmentationResult(
 				allSegments), priorityEdges);
 		// , new FirstPassSegmentationRules());
