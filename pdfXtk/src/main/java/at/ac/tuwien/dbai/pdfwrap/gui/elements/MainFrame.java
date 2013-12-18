@@ -11,17 +11,27 @@ import at.ac.tuwien.dbai.pdfwrap.gui.tools.XMLLayerLoader;
 import at.ac.tuwien.dbai.pdfwrap.model.document.GenericSegment;
 import at.ac.tuwien.dbai.pdfwrap.model.document.Page;
 import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.plaf.basic.BasicArrowButton;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,19 +42,21 @@ import java.util.Map;
 /**
  * The main frame of the pdfXtkGUI
  * 
+ * In order to run the PDF analysis process via this GUI, GhostScript must be installed
+ * 
  * @author Timo Schleicher
  *
  */
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
-
-//	private final String ghostScriptPath = "C:\\Program Files\\gs\\gs9.10\\bin\\gswin64.exe";
-	private final String ghostScriptPath = "gs";
+	
+	private String ghostScriptPath;
 	
 	private JSplitPane split;
 	private PageSpinner pageSpinner;
 	private SelectionPanel attributePanel;
 	private JComboBox<String> resetViewBox;
+	private JLabel mouseCoordinateLabel;
 	
 	private PDFPanel pdfPanel;
 	
@@ -131,24 +143,102 @@ public class MainFrame extends JFrame {
 		
 		menu.add(Box.createRigidArea(new Dimension(0, 15)));
 		
+		//Container for the GhostScript path
+		JPanel ghostContainer = new JPanel() {
+			
+			@Override
+			public Dimension getMaximumSize() {
+				
+				//Need to override because of height resize bug
+				Dimension max = super.getMaximumSize();
+                max.height = getPreferredSize().height;
+                max.width = getPreferredSize().width;
+                return max;
+			}
+		};
+		
+		ghostContainer.setLayout(new BoxLayout(ghostContainer, BoxLayout.X_AXIS));
+		
+		JLabel ghostLabel = new JLabel("GhostScript:");
+		
+		final JTextField ghostPath = new JTextField();
+		ghostPath.setPreferredSize(new Dimension(50,0));	
+		
+		ghostPath.setText(checkGhostScript());
+		ghostPath.setToolTipText(ghostPath.getText());
+		
+		BasicArrowButton gsPathArrow = new BasicArrowButton(BasicArrowButton.EAST);
+		
+		gsPathArrow.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				final JFileChooser fc = new JFileChooser();
+				
+				int returnVal = fc.showOpenDialog(MainFrame.this);
+
+		        if (returnVal == JFileChooser.APPROVE_OPTION) {
+		        	
+	        		ghostPath.setText(fc.getSelectedFile().getPath());
+	        		ghostPath.setCaretPosition(0);
+		        }
+			}
+		});
+
+		ghostContainer.add(Box.createRigidArea(new Dimension(5, 0)));
+		ghostContainer.add(ghostLabel);
+		ghostContainer.add(Box.createRigidArea(new Dimension(5, 0)));
+		ghostContainer.add(ghostPath);
+		ghostContainer.add(Box.createRigidArea(new Dimension(5, 0)));
+		ghostContainer.add(gsPathArrow);
+		ghostContainer.add(Box.createRigidArea(new Dimension(5, 0)));
+		
+		menu.add(ghostContainer);
+		
+		menu.add(Box.createRigidArea(new Dimension(0, 15)));
+		
 		//Button for opening a new PDF file
 		JButton openButton = new JButton("Open File");
 		openButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				final JFileChooser fc = new JFileChooser();
-				fc.setFileFilter(new OpenDocFileFilter());
 				
-				int returnVal = fc.showOpenDialog(MainFrame.this);
+				//If no GhostScript path has been typed in
+				if (ghostPath.getText().length() == 0) {
+					
+					JOptionPane.showMessageDialog(MainFrame.this, "Please first specify your GhostScript installation path.");
+					
+				} else {					
 
-		        if (returnVal == JFileChooser.APPROVE_OPTION) {
-		        	
-	        		curFile = fc.getSelectedFile();
-	        		
-			        new PDFAnalysisThread(curFile).execute();
-		        }
+					try {
+						
+						//Get the path from the JTextField
+						ghostScriptPath = ghostPath.getText();
+						
+						//Additionally write it in a text file
+						PrintWriter out = new PrintWriter(new File("gs.txt"));
+						out.println(ghostScriptPath);
+						
+						out.close();
+						
+					} catch (FileNotFoundException er) {
+						er.printStackTrace();
+					}
+					
+					final JFileChooser fc = new JFileChooser();
+					fc.setFileFilter(new OpenDocFileFilter());
+					
+					int returnVal = fc.showOpenDialog(MainFrame.this);
+
+			        if (returnVal == JFileChooser.APPROVE_OPTION) {
+			        	
+		        		curFile = fc.getSelectedFile();
+		        		
+				        new PDFAnalysisThread(curFile).execute();
+			        }
+				}
 			}
 		});
 		
@@ -239,6 +329,8 @@ public class MainFrame extends JFrame {
 		
 		//Spinner for page spinning
 		pageSpinner = new PageSpinner();
+		
+		//Left button reaction
 		pageSpinner.getPreviousButton().addActionListener(new ActionListener() {
 			
 			@Override
@@ -246,7 +338,7 @@ public class MainFrame extends JFrame {
 
 				if (curFile != null) {
 		    		
-					boolean successful = pageSpinner.decrease();
+					boolean successful = pageSpinner.change(pageSpinner.getCurrentPage()-1);
 					
 					if(successful) {
 						
@@ -257,6 +349,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
+		//Right button reaction
 		pageSpinner.getNextButton().addActionListener(new ActionListener() {
 			
 			@Override
@@ -264,7 +357,39 @@ public class MainFrame extends JFrame {
 
 				if (curFile != null) {
 		    		
-					boolean successful = pageSpinner.increase();
+					boolean successful = pageSpinner.change(pageSpinner.getCurrentPage()+1);
+					
+					if(successful) {
+						
+			            new PDFAnalysisThread(curFile, pageSpinner.getCurrentPage()).execute();
+					}
+
+				}
+			}
+		});
+		
+		//Middle text field reaction
+		pageSpinner.getTextField().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				if (curFile != null) {
+		    		
+					int side = 0;
+					
+					try {
+						
+						side = Integer.parseInt(pageSpinner.getTextField().getText());
+								
+					} catch (NumberFormatException e) {
+						
+						pageSpinner.change(pageSpinner.getCurrentPage());
+						return;
+					}
+					
+					
+					boolean successful = pageSpinner.change(side);
 					
 					if(successful) {
 						
@@ -292,6 +417,7 @@ public class MainFrame extends JFrame {
 				//Need to override because of height resize bug
 				Dimension max = super.getMaximumSize();
                 max.height = getPreferredSize().height;
+                max.width = getPreferredSize().width;
                 return max;
 			}
 		};
@@ -337,7 +463,7 @@ public class MainFrame extends JFrame {
 		JPanel processingOptionPanel = new JPanel();
 		
 		processingOptionPanel.setLayout(new BoxLayout(processingOptionPanel , BoxLayout.Y_AXIS));
-		processingOptionPanel.setBorder(BorderFactory.createTitledBorder("Processing Options"));
+		processingOptionPanel.setBorder(BorderFactory.createTitledBorder("Options"));
 		processingOptionPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		processingOptionPanel.add(processingTypeComboBox);
@@ -363,6 +489,17 @@ public class MainFrame extends JFrame {
 		
 		menu.add(attributePanel);
 		
+		menu.add(Box.createRigidArea(new Dimension(0, 15)));
+
+		//Panel for displaying the mouse coordinates
+		JPanel coordinatePanel = new JPanel();
+		
+		mouseCoordinateLabel = new JLabel("  /  ");
+		
+		coordinatePanel.add(mouseCoordinateLabel);
+		
+		menu.add(coordinatePanel);
+		
 		Dimension fitWindow = getBestWindowSize();
 		
 		menu.setPreferredSize(new Dimension(160, (int)fitWindow.getHeight()));
@@ -371,10 +508,22 @@ public class MainFrame extends JFrame {
 		JPanel PDFViewerPanel = new JPanel();
 		PDFViewerPanel.setPreferredSize(fitWindow);
 
-		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menu, PDFViewerPanel);
+		JScrollPane menuScroll = new JScrollPane(menu);
+		
+		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, menuScroll, PDFViewerPanel);
 		split.setEnabled(false);
 		
 		getContentPane().add(split);
+	}
+	
+	/**
+	 * Getter method for the PDF panel.
+	 * 
+	 * @return the current PDF panel
+	 */
+	public PDFPanel getPDFPanel() {
+		
+		return this.pdfPanel;
 	}
 	
 	/**
@@ -443,6 +592,36 @@ public class MainFrame extends JFrame {
 
 		return new Dimension((int)(screen.getWidth()*(1.0/3.0)), (int)(screen.getHeight()*(2.0/3.0)));
 	}
+	
+	/**
+	 * Checks if a file exists that contains the GhostScript path.
+	 * 
+	 * @return the GhostScript path contained in the text file otherwise null
+	 */
+	private String checkGhostScript() {
+
+			if (new File("gs.txt").exists()) {
+				
+				try {
+					
+					InputStream in = new FileInputStream("gs.txt");
+					BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(in)));
+					
+					String temp = br.readLine();
+					
+					br.close();
+					
+					return temp;
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			return null;		
+		}
 	
 	/**
 	 * Inner class using SwingWorker to prevent the GUI from freezing while analyzing a PDF document
@@ -574,7 +753,7 @@ public class MainFrame extends JFrame {
 			
 			resetViewBox.setSelectedItem("Fit Width");	
 			
-			pdfPanel = new PDFPanel(split.getRightComponent().getSize(), img, styl, attributePanel, pageList.get(pageNo-1));
+			pdfPanel = new PDFPanel(split.getRightComponent().getSize(), img, styl, attributePanel, pageList.get(pageNo-1), mouseCoordinateLabel);
 			split.setRightComponent(pdfPanel);
 			
 			return null;

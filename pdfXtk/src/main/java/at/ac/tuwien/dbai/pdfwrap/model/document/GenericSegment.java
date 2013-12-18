@@ -31,8 +31,10 @@
  */
 package at.ac.tuwien.dbai.pdfwrap.model.document;
 
+import at.ac.tuwien.dbai.pdfwrap.gui.exceptions.UnchangeableAttributeException;
 import at.ac.tuwien.dbai.pdfwrap.utils.SegmentUtils;
 import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
+
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.w3c.dom.Document;
@@ -56,6 +58,12 @@ public class GenericSegment implements Cloneable, IXmillumSegment, Serializable 
     protected float x1, x2, y1, y2;
 	boolean zeroSize = false;
 	
+	//===== Attribute Names ===== -> later used in XML
+	private static final String TYPE = "type";
+	private static final String X1 = "x1";
+	private static final String X2 = "x2";
+	private static final String Y1 = "y1";
+	private static final String Y2 = "y2";
 
 	public GenericSegment(){
 	}
@@ -247,15 +255,57 @@ public class GenericSegment implements Cloneable, IXmillumSegment, Serializable 
 		ArrayList<AttributeTuple> attributeList = new ArrayList<AttributeTuple>();
 		
 		//Add segment type for later recognition purposes
-		attributeList.add(new AttributeTuple("type", tagName()));
+		attributeList.add(new AttributeTuple(TYPE, tagName()));
 		
 		//Add new attributes here
-		attributeList.add(new AttributeTuple("x1", x1));
-		attributeList.add(new AttributeTuple("y1", y1));
-		attributeList.add(new AttributeTuple("x2", x2));
-		attributeList.add(new AttributeTuple("y2", y2));	
+		attributeList.add(new AttributeTuple(X1, x1));
+		attributeList.add(new AttributeTuple(Y1, y1));
+		attributeList.add(new AttributeTuple(X2, x2));
+		attributeList.add(new AttributeTuple(Y2, y2));	
 		
 		return attributeList;
+	}
+	
+	/**
+	 * Setter method for setting new attribute values
+	 * 
+	 * @param attName the name of the attribute
+	 * @param attValue the new value of the attribute
+	 * @throws UnchangeableAttributeException Is thrown whenever an attribute is modified and the modify operation was not yet defined
+	 * @throws NumberFormatException Is thrown whenever the parsing from String to the actual attribute value type fails
+	 */
+	public void setAttribute(String attName, String attValue) throws UnchangeableAttributeException, NumberFormatException {
+			
+			switch (attName) {
+			
+			case X1:
+				
+				setX1(Float.parseFloat(attValue));
+				
+				break;
+
+			case X2:
+				
+				setX2(Float.parseFloat(attValue));
+				
+				break;
+				
+			case Y1:
+				
+				setY1(Float.parseFloat(attValue));
+				
+				break;
+				
+			case Y2:
+				
+				setY2(Float.parseFloat(attValue));
+				
+				break;
+				
+			case TYPE:
+
+				throw new UnchangeableAttributeException(attName);
+			}
 	}
 
 	public void setElementAttributes(Document resultDocument, Element newSegmentElement,

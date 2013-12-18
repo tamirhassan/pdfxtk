@@ -157,16 +157,16 @@ public class CharSegment extends TextSegment
     	else return font.getBaseFont();
     }
     
-    @Override
-    public List<AttributeTuple> getAttributes() {
-
-    	List<AttributeTuple> attributeList = super.getAttributes();
-
-    	attributeList.add(new AttributeTuple("opindex", sourceOp.getOpIndex()));
-    	attributeList.add(new AttributeTuple("argindex", sourceOp.getArgIndex()));
-
-    	return attributeList;
-    }
+//    @Override
+//    public List<AttributeTuple> getAttributes() {
+//
+//    	List<AttributeTuple> attributeList = super.getAttributes();
+//
+//    	attributeList.add(new AttributeTuple("opindex", sourceOp.getOpIndex()));
+//    	attributeList.add(new AttributeTuple("argindex", sourceOp.getArgIndex()));
+//
+//    	return attributeList;
+//    }
     
 	public boolean isOverprint() {
 		return overprint;

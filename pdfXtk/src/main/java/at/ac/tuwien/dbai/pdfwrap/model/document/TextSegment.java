@@ -31,7 +31,9 @@
  */
 package at.ac.tuwien.dbai.pdfwrap.model.document;
 
+import at.ac.tuwien.dbai.pdfwrap.gui.exceptions.UnchangeableAttributeException;
 import at.ac.tuwien.dbai.pdfwrap.utils.Utils;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -56,6 +58,12 @@ public class TextSegment extends GenericSegment
     protected float fontSize;
     protected String fontName;
     
+	//===== Attribute Names ===== -> later used in XML
+	private static final String TEXT = "text";
+	private static final String FONTSIZE = "fontsize";
+	private static final String FONT = "font";
+	private static final String BOLD = "bold";
+	private static final String ITALIC = "italic";
     
     public String getFontName() {
 		return fontName;
@@ -175,13 +183,46 @@ public class TextSegment extends GenericSegment
     {
     	List<AttributeTuple> attributeList = super.getAttributes();
     	
-    	attributeList.add(new AttributeTuple("text", text));
-    	attributeList.add(new AttributeTuple("fontsize", fontSize));
-    	attributeList.add(new AttributeTuple("font", fontName));
-    	attributeList.add(new AttributeTuple("bold", isBold()));
-    	attributeList.add(new AttributeTuple("italic", isItalic()));
+    	attributeList.add(new AttributeTuple(TEXT, text));
+    	attributeList.add(new AttributeTuple(FONTSIZE, fontSize));
+    	attributeList.add(new AttributeTuple(FONT, fontName));
+    	attributeList.add(new AttributeTuple(BOLD, isBold()));
+    	attributeList.add(new AttributeTuple(ITALIC, isItalic()));
     	
     	return attributeList;
+    }
+    
+    @Override
+    public void setAttribute(String attName, String attValue) throws UnchangeableAttributeException, NumberFormatException {
+    	
+    	super.setAttribute(attName, attValue);
+		
+		switch (attName) {
+		
+		case TEXT:
+			
+			setText(attValue);
+			
+			break;
+
+		case FONTSIZE:
+			
+			setFontSize(Float.parseFloat(attValue));
+			
+			break;
+			
+		case FONT:
+			
+			throw new UnchangeableAttributeException(attName);
+			
+		case BOLD:
+			
+			throw new UnchangeableAttributeException(attName);
+			
+		case ITALIC:
+			
+			throw new UnchangeableAttributeException(attName);
+		}
     }
     
     public boolean isBold()

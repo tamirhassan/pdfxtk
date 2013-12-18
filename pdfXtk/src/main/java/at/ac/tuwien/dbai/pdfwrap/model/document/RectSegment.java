@@ -35,6 +35,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.ac.tuwien.dbai.pdfwrap.gui.exceptions.UnchangeableAttributeException;
+
 
 /**
  * Rectangular segment document element; represents
@@ -45,6 +47,17 @@ import java.util.List;
  */
 public class RectSegment extends GenericSegment
 {
+
+	
+	protected Color fillColor;
+	protected Color lineColor;
+	protected boolean isFilled;
+	
+	//===== Attribute Names ===== -> later used in XML
+	private static final String FILLCOLOR = "fillcolor";
+	private static final String LINECOLOR = "linecolor";
+	private static final String FILLED = "filled";
+		
 	/**
      * Constructor.
      *
@@ -53,11 +66,6 @@ public class RectSegment extends GenericSegment
      * @param y1 The y1 coordinate of the segment.
      * @param y2 The y2 coordinate of the segment.
      */
-	
-	protected Color fillColor;
-	protected Color lineColor;
-	protected boolean isFilled;
-	
     public RectSegment(
         float x1,
         float x2,
@@ -94,6 +102,58 @@ public class RectSegment extends GenericSegment
     		retVal.add(new LineSegment(x2, x2, y1, y2));
     		return retVal;
     	}
+    }
+    
+    @Override
+    public List<AttributeTuple> getAttributes() {
+    	
+    	List<AttributeTuple> attributeList = super.getAttributes();
+    	
+    	if (fillColor != null) {
+    		
+        	attributeList.add(new AttributeTuple(FILLCOLOR, fillColor.toString()));	
+    	}
+
+    	if (lineColor != null) {
+    		
+    		attributeList.add(new AttributeTuple(LINECOLOR, lineColor.toString()));
+    	}
+    	
+    	attributeList.add(new AttributeTuple(FILLED, isFilled));
+    	
+    	return attributeList;
+    }
+    
+    @Override
+    public void setAttribute(String attName, String attValue) throws UnchangeableAttributeException, NumberFormatException {
+    	
+    	super.setAttribute(attName, attValue);
+		
+		switch (attName) {
+		
+		case FILLCOLOR:
+			
+			throw new UnchangeableAttributeException(attName);
+
+		case LINECOLOR:
+			
+			throw new UnchangeableAttributeException(attName);
+			
+		case FILLED:
+			
+			if (attValue.toLowerCase().equals("true")) {
+				
+				setFilled(true);
+				
+			} else if (attValue.toLowerCase().equals("false")){
+				
+				setFilled(false);
+				
+			} else {
+				
+				throw new NumberFormatException();
+			}
+		}
     }
 
 	public Color getFillColor()

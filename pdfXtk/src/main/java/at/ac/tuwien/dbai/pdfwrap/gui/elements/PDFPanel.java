@@ -4,6 +4,7 @@ import at.ac.tuwien.dbai.pdfwrap.gui.layer.StyledSegment;
 import at.ac.tuwien.dbai.pdfwrap.model.document.Page;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
@@ -59,6 +60,9 @@ public class PDFPanel extends JPanel implements MouseListener, MouseMotionListen
 	//The underlying page
 	private Page page;
 	
+	//The JLabel for displaying the current mouse position
+	private JLabel mouseCoordinates;
+	
 	/**
 	 * The constructor for the PDFPanel object.
 	 * 
@@ -67,8 +71,10 @@ public class PDFPanel extends JPanel implements MouseListener, MouseMotionListen
 	 * @param segList A list with all the elements of the PDF analysis process
 	 * @param attributePanel A panel for displaying the attributes of the selected segments
 	 * @param page The underlying page
+	 * @param mouseCoordinates the JLabel for displaying the current mouse position
 	 */
-	public PDFPanel(Dimension dim, BufferedImage img, List<StyledSegment> segList, SelectionPanel attributePanel, Page page) {
+	public PDFPanel(Dimension dim, BufferedImage img, List<StyledSegment> segList,
+			        SelectionPanel attributePanel, Page page, JLabel mouseCoordinates) {
 		
 		this.setSize(dim);
 		this.setOpaque(false);
@@ -96,6 +102,8 @@ public class PDFPanel extends JPanel implements MouseListener, MouseMotionListen
 		this.attributePanel = attributePanel;
 		
 		this.page = page;
+		
+		this.mouseCoordinates = mouseCoordinates;
 		
 		this.printImg = true;
 		
@@ -170,16 +178,27 @@ public class PDFPanel extends JPanel implements MouseListener, MouseMotionListen
 		
 		//Calculate the scaling factors
 		imageResizeFactor = (float)this.getWidth()/(float)img.getWidth();
-		pageResizeFactor = ((float)this.getWidth()*zoomValue);
+		pageResizeFactor = ((float)this.getWidth()*zoomValue/page.getWidth());
 		imgH = (int)((float)img.getHeight()*imageResizeFactor*zoomValue);
 		
 		//Scale every segment according to the previously calculated page factor
 		for (StyledSegment seg : segList) {
 			
-			seg.updateLocalCoordinates(pageResizeFactor, page.getWidth(), page.getHeight());
+			seg.updateLocalCoordinates(pageResizeFactor, page.getHeight());
 		}
 		
 		setPreferredSize(new Dimension(1, imgH));
+	}
+	
+	/**
+	 * Update the location of a {@link StyledSegment} after it has been modified by the user
+	 * 
+	 * @param seg the segment that has been modified
+	 */
+	public void updateResizeScaleFactor(StyledSegment seg) {
+		
+		seg.updateLocalCoordinates(pageResizeFactor, page.getHeight());
+		repaint();
 	}
 	
 	/**
@@ -260,7 +279,7 @@ public class PDFPanel extends JPanel implements MouseListener, MouseMotionListen
 					}
 					
 					//Position the merged segment on the screen by considering the current window size
-					growingSeg.updateLocalCoordinates(pageResizeFactor, page.getWidth(), page.getHeight());
+					growingSeg.updateLocalCoordinates(pageResizeFactor, page.getHeight());
 					
 					//Add the new segment to the current page
 					page.getItems().add(growingSeg.getSegment());			
@@ -276,6 +295,7 @@ public class PDFPanel extends JPanel implements MouseListener, MouseMotionListen
 			});
 			
 			menu.add(merge);
+			
 			menu.show(e.getComponent(), e.getX(), e.getY());
 			
 		}
@@ -285,7 +305,10 @@ public class PDFPanel extends JPanel implements MouseListener, MouseMotionListen
 	public void mouseEntered(MouseEvent e) { }
 
 	@Override
-	public void mouseExited(MouseEvent e) { }
+	public void mouseExited(MouseEvent e) { 
+		
+		mouseCoordinates.setText("0/0");
+	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -375,7 +398,28 @@ public class PDFPanel extends JPanel implements MouseListener, MouseMotionListen
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) { }
+	public void mouseMoved(MouseEvent e) {
+			
+		Point pos = e.getPoint();
+		
+		int x = (int) ((pos.getX()-originX) / pageResizeFactor);
+		int y = (int) (page.getHeight() - (pos.getY()-originY) / pageResizeFactor);
+		
+		mouseCoordinates.setText(x + " / " + y);
+		
+	}
+	
+	@Override
+	public JToolTip createToolTip() {
+		
+		//Customizing tool tip for better visibility
+		JToolTip tip = super.createToolTip();
+		
+		tip.setForeground(Color.BLACK);
+		tip.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		
+		return tip;
+	}
 
 	//Methods of the ComponentListener
 	@Override

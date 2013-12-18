@@ -14,7 +14,8 @@ import java.awt.*;
 @SuppressWarnings("serial")
 public class PageSpinner extends JPanel {
 
-	private JLabel display;
+	private JTextField displayLeft;
+	private JLabel displayRight;
 	
 	private int currentPageNo;
 	private int maxPageNo;
@@ -31,7 +32,11 @@ public class PageSpinner extends JPanel {
 		currentPageNo = 0;
 		maxPageNo = 0;
 		
-		display = new JLabel(currentPageNo + " / " + maxPageNo);
+		displayLeft = new JTextField(Integer.toString(currentPageNo));
+		displayLeft.setBackground(null);
+		displayLeft.setBorder(null);
+		
+		displayRight = new JLabel("/ " + maxPageNo);
 		
 		previous = new BasicArrowButton(BasicArrowButton.WEST);
 		
@@ -42,7 +47,8 @@ public class PageSpinner extends JPanel {
 		
 		add(Box.createRigidArea(new Dimension(7, 0)));
 		
-		add(display);
+		add(displayLeft);
+		add(displayRight);
 		
 		add(Box.createRigidArea(new Dimension(7, 0)));
 		
@@ -70,37 +76,30 @@ public class PageSpinner extends JPanel {
 	}
 	
 	/**
-	 * Increases the spinner value by one but takes care of the maximum page number
+	 * Getter method for the JTextField
 	 * 
-	 * @return true if the increasing operation was successful, false otherwise
+	 * @return the left JTextfield
 	 */
-	public boolean increase() {
+	public JTextField getTextField() {
 		
-		if ((currentPageNo+1) > maxPageNo) {
-			return false;
-		}
-		
-		currentPageNo++;
-		
-		display.setText(currentPageNo + " / " + maxPageNo);
-		
-		return true;
+		return displayLeft;
 	}
 	
 	/**
-	 * Decreases the spinner value by one but takes care not to fall below a value of one
+	 * Sets the current spinner value to the given value but takes care of the maximum page number
 	 * 
-	 * @return true if the decreasing operation was successful, false otherwise
+	 * @param value the number of the side you want to access
+	 * @return true if the increasing operation was successful, false otherwise
 	 */
-	public boolean decrease() {
+	public boolean change(int value) {
 		
-		if ((currentPageNo-1) <= 0) {
+		if ((value) > maxPageNo || (value) <= 0) {
 			return false;
 		}
 		
-		currentPageNo--;
+		currentPageNo = value;
 		
-		display.setText(currentPageNo + " / " + maxPageNo);
+		displayLeft.setText(Integer.toString(currentPageNo));
 		
 		return true;
 	}
@@ -125,7 +124,8 @@ public class PageSpinner extends JPanel {
 		maxPageNo = max;
 		currentPageNo = 1;
 		
-		display.setText(currentPageNo + " / " + maxPageNo);
+		displayLeft.setText(Integer.toString(currentPageNo));
+		displayRight.setText(" / " + maxPageNo);
 	}
 	
 	@Override

@@ -47,12 +47,9 @@ public class StyledSegment implements Comparable<StyledSegment> {
 	 * screen scaling factor.
 	 * 
 	 * @param screenfactor The current screen scaling factor
-	 * @param pageWidth The width of the original PDF page
 	 * @param pageHeight The height of the original PDF page
 	 */
-	public void updateLocalCoordinates(float screenfactor,  float pageWidth, float pageHeight) {
-		
-		screenfactor /= pageWidth;
+	public void updateLocalCoordinates(float screenfactor, float pageHeight) {
 		
 		x = segment.getX1()*screenfactor;
 		width = segment.getWidth()*screenfactor;

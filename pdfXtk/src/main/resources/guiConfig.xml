@@ -50,4 +50,27 @@
     <stroke-width>1</stroke-width>  
   </layer>
   
+  <layer name="Char Segments" source="char-segment"> 
+    <shape>rectangle</shape>
+    <filled>true</filled>
+    <color>
+      <r>0</r>
+      <g>0</g>
+      <b>255</b>
+      <a>63</a>
+    </color>
+    <stroke-width>1</stroke-width>  
+  </layer>
+  
+  <layer name="Text Fragments" source="text-fragment"> 
+    <shape>rectangle</shape>
+    <filled>true</filled>
+    <color>
+      <r>255</r>
+      <g>0</g>
+      <b>255</b>
+      <a>63</a>
+    </color>
+    <stroke-width>1</stroke-width>  
+  </layer>
 </layers>
