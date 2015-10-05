@@ -47,7 +47,7 @@ public class XComparator implements Comparator<GenericSegment>
 			double x1 = obj1.getX1();
 			double x2 = obj2.getX1();
 
-			return (int) (x1 - x2);
+			return (int) (Math.round(x1) - Math.round(x2));
 		}
 
 		public boolean equals(Object obj)

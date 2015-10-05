@@ -158,8 +158,17 @@ public class LineProcessor
     	// TODO: support super/subscript natively -- or allow misc segments ...
     	
         // pre: textBlocks in collection must be sorted in y-then-x order
-        Collections.sort(textBlocks, new XYTextComparator());
-        
+		Boolean sameLineToleranceFound=false;
+		while(sameLineToleranceFound) {
+			try {
+				Collections.sort(textBlocks, new XYTextComparator());
+				sameLineToleranceFound=true;
+			}catch(IllegalArgumentException E){
+				Utils.sameLineTolerance=Utils.sameLineTolerance+0.1f;
+				if (Utils.sameLineTolerance>0.6)
+					sameLineToleranceFound=true;
+			}
+		}
         // pre: all items in textBlocks must be TextPosition objects
         // TODO: create a specific exception here
         

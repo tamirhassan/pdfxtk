@@ -47,7 +47,7 @@ public class YComparator implements Comparator<GenericSegment>
 		double y1 = obj1.getY1();
 		double y2 = obj2.getY1();
 
-		return (int) (y2 - y1);
+		return (int) (Math.round(y2) - Math.round(y1));
 	}
 
 	public boolean equals(Object obj)

@@ -55,11 +55,11 @@ public class XYTextComparator implements Comparator<TextSegment>
 		float tolerance = (float)(obj1.getFontSize() + obj2.getFontSize()) * Utils.sameLineTolerance; // 10% of avg
 		if (Utils.within(y1, y2, tolerance))
 		{
-			return (int) (x1 - x2);
+			return (int) (Math.round(x1) - Math.round(x2));
 		} 
 		else
 		{
-			return (int) (y2 - y1);
+			return (int) (Math.round(y2) - Math.round(y1));
 			// return (int) (y1 - y2);
 		}
 	}

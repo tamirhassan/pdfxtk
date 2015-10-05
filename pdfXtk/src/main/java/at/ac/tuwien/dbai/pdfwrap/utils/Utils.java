@@ -77,7 +77,7 @@ public class Utils
 //	public final static boolean showWrapperPanel = false;
 //	public final static boolean standardLookAndFeel = false;
 	
-	public final static float sameLineTolerance = 0.3f;
+	public static float sameLineTolerance = 0.3f;
 	
 	// from DocGBPanel.java
 	public static RenderingHints hints;
