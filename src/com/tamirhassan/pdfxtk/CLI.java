@@ -108,7 +108,11 @@ public class CLI {
             outFile = inFile.substring( 0, inFile.length() -4 ) + ".html";
         }
         
-        DocumentProcessor dp = new PageAnalyser();
+        DocumentProcessor dp = new DocumentProcessor();
+        
+        if (true) // performs segmentation too
+        	dp = new PageAnalyser();
+        	
         dp.inFile = inFile;
         dp.outFile = outFile;
 
