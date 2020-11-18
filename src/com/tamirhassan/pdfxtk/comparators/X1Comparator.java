@@ -43,23 +43,23 @@ import com.tamirhassan.pdfxtk.model.GenericSegment;
  * Sorts on X1 coordinate
  */
 public class X1Comparator implements Comparator<GenericSegment>
+{
+	public int compare(GenericSegment obj1, GenericSegment obj2)
 	{
-		public int compare(GenericSegment obj1, GenericSegment obj2)
-		{
-			// sorts in x order
-			double x1 = obj1.getX1();
-			double x2 = obj2.getX1();
+		// sorts in x order
+		double x1 = obj1.getX1();
+		double x2 = obj2.getX1();
 
 //			causes a contract violation (rounding?)
 //			return (int) (x1 - x2);
-			
-			if (x2 > x1) return -1;
-			else if (x2 == x1) return 0;
-			else return 1;
-		}
-
-		public boolean equals(Object obj)
-		{
-			return obj.equals(this);
-		}
+		
+		if (x2 > x1) return -1;
+		else if (x2 == x1) return 0;
+		else return 1;
 	}
+
+	public boolean equals(Object obj)
+	{
+		return obj.equals(this);
+	}
+}

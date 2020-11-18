@@ -316,4 +316,12 @@ public class TextSegment extends GenericSegment
 	public void setSuperSubscript(int superSubscript) {
 		this.superSubscript = superSubscript;
 	}
+
+	public int getClassification() {
+		return classification;
+	}
+
+	public void setClassification(int classification) {
+		this.classification = classification;
+	}
 }

@@ -41,9 +41,9 @@ import org.w3c.dom.Element;
  * @author Tamir Hassan, pdfanalyser@tamirhassan.com
  * @version PDF Analyser 0.9
  */
-public interface IXmillumSegment
+public interface IXMLSegment
 {
-    public abstract void addAsXmillum(Document resultDocument, Element parent, 
+    public abstract void addAsXML(Document resultDocument, Element parent, 
     	GenericSegment pageDim, float resolution);
     
     public abstract void setElementAttributes(Document resultDocument, Element parent, 

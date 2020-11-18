@@ -597,7 +597,7 @@ public class CustomStreamEngine extends PDFGraphicsStreamEngine
 	 * 
 	 * @param PDPage to process
 	 */
-	protected CustomStreamEngine(PDPage page) 
+	public CustomStreamEngine(PDPage page) 
     {
 		super(page);
 		// TODO Auto-generated constructor stub

@@ -36,11 +36,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import com.tamirhassan.pdfxtk.comparators.X1Comparator;
 import com.tamirhassan.pdfxtk.comparators.X2Comparator;
 import com.tamirhassan.pdfxtk.comparators.Y1Comparator;
 import com.tamirhassan.pdfxtk.comparators.Y2Comparator;
 import com.tamirhassan.pdfxtk.model.GenericSegment;
+import com.tamirhassan.pdfxtk.model.IXHTMLSegment;
 import com.tamirhassan.pdfxtk.model.TextSegment;
 import com.tamirhassan.pdfxtk.utils.ListUtils;
 import com.tamirhassan.pdfxtk.utils.SegmentUtils;
@@ -950,5 +954,57 @@ public class AdjacencyGraph<T extends GenericSegment>// extends DocumentGraph
                 " below: " + neighboursBelow.size() + "\n");
         }
         return retVal.toString();
+    }
+    
+    /**
+     * adds page graph as XML
+     * 
+     * @param resultDocument
+     * @param parent
+     * @param pageDim
+     * @param resolution
+     * @param pageNo if >=0 will be included as attribute
+     */
+    public void addAsXML(Document resultDocument, Element parent, 
+    		GenericSegment pageDim, float resolution, int pageNo)
+    {
+    	Element newPageElement = resultDocument.createElement("page-graph");
+    	if (pageNo >= 0)
+    		newPageElement.setAttribute("page-no", Integer.toString(pageNo));
+    		
+    	// number vert nodes 0-based consec.
+    	List<T> vertCopy = new ArrayList<T>();
+    	vertCopy.addAll(vert);
+    	Collections.sort(vertCopy, new Y1Comparator());
+    	
+    	int index = 0;
+    	for (T node : vertCopy)
+    	{
+    		node.addAsXmillum(resultDocument, newPageElement, pageDim, resolution, index);
+    		index ++;
+    	}
+    	
+    	// TODO: sort edges horiz first?
+        // add edges
+        for (AdjacencyEdge<T> e : edges)
+        {
+        	String elementName = "vert-edge";
+        	if (e.isHorizontal()) elementName = "horiz-edge";
+        	
+        	Element newEdgeElement = resultDocument.createElement(elementName);
+        	newEdgeElement.setAttribute("node-from", Integer.toString(vertCopy.indexOf(e.getNodeFrom()))); 
+        	newEdgeElement.setAttribute("node-to", Integer.toString(vertCopy.indexOf(e.getNodeTo()))); 
+        	
+        	newPageElement.appendChild(newEdgeElement);
+        }
+        
+        // output other relations
+        
+//        newPageElement.appendChild
+//            (resultDocument.createTextNode("Page " + pageNo));
+        
+        parent.appendChild(newPageElement);
+        
+
     }
 }

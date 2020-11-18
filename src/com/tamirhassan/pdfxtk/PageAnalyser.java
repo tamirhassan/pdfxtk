@@ -1,20 +1,31 @@
 package com.tamirhassan.pdfxtk;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Element;
+
 import com.tamirhassan.pdfxtk.comparators.XmidComparator;
 import com.tamirhassan.pdfxtk.comparators.Y1Comparator;
 import com.tamirhassan.pdfxtk.comparators.Y2Comparator;
+import com.tamirhassan.pdfxtk.exceptions.DocumentProcessingException;
 import com.tamirhassan.pdfxtk.graph.AdjacencyGraph;
 import com.tamirhassan.pdfxtk.model.GenericSegment;
 import com.tamirhassan.pdfxtk.model.Page;
 import com.tamirhassan.pdfxtk.model.TextBlock;
 import com.tamirhassan.pdfxtk.model.TextFragment;
 import com.tamirhassan.pdfxtk.utils.ImgOutputUtils;
-import com.tamirhassan.pdfxtk.utils.ListUtils;
 import com.tamirhassan.pdfxtk.utils.SegmentUtils;
+import com.tamirhassan.pdfxtk.utils.XMLUtils;
 
 /* modified from CustomPageDrawer.java
  * these portions are subject to the following license:
@@ -75,6 +86,8 @@ public class PageAnalyser extends DocumentProcessor{
     protected final static boolean DEBUG_IMG_UT = false;
     //	protected final static boolean DEBUG_IMG_UT = false;
     
+    protected AdjacencyGraph<TextFragment> ag;
+    
 	public PageAnalyser()
 	{
 		
@@ -124,10 +137,11 @@ public class PageAnalyser extends DocumentProcessor{
      * @param dims
      * @return
      */
-    protected static List<TextBlock> initialSegmentation
+    protected List<TextBlock> initialSegmentation
     (List<TextFragment> mtfCrop, GenericSegment dims) 
     {
-        AdjacencyGraph<TextFragment> ag = new AdjacencyGraph<>();
+    	// AdjacencyGraph<TextFragment> ag = new AdjacencyGraph<>();
+    	ag = new AdjacencyGraph<>();
         // add all TextFragments (i.e. sub-instructions)
         ag.addList(mtfCrop);
 
@@ -174,6 +188,7 @@ public class PageAnalyser extends DocumentProcessor{
     	Collections.sort(retVal, new Y1Comparator());
     	for (TextBlock b : retVal)
     		b.setCalculatedFields();
+    	
     	return retVal;
     }
 

@@ -9,8 +9,11 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.tamirhassan.pdfxtk.graph.AdjacencyEdge;
+import com.tamirhassan.pdfxtk.graph.AdjacencyGraph;
 import com.tamirhassan.pdfxtk.model.CharSegment;
 import com.tamirhassan.pdfxtk.model.GenericSegment;
+import com.tamirhassan.pdfxtk.model.TextBlock;
 
 public class ImgOutputUtils 
 {
@@ -155,16 +158,98 @@ public class ImgOutputUtils
 		return bi;
 	}
 	
+	/*
+	// TODO: refactor and include as extendable class
+	
+	public static BufferedImage createImage(
+			AdjacencyGraph<? extends GenericSegment> ag, 
+			GenericSegment pageBounds, float scale)
+	{
+		long t1 = System.currentTimeMillis();
+		
+		GenericSegment dim = new GenericSegment(
+				pageBounds.getX1() * scale, 
+				pageBounds.getX2() * scale, 
+				pageBounds.getY1() * scale, 
+				pageBounds.getY2() * scale
+		);
+		
+		BufferedImage bi = new BufferedImage((int)dim.getWidth(), (int)dim.getHeight(), 
+				BufferedImage.TYPE_INT_RGB);
+		
+		Graphics2D g = bi.createGraphics();
+		
+		// white background
+		g.setColor(Color.white);
+		g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+		
+		g.setColor(Color.black);
+		for (GenericSegment gs : ag.getVertSegmentList())
+		{
+			GenericSegment s = new GenericSegment(
+					gs.getX1() * scale, 
+					gs.getX2() * scale, 
+					gs.getY1() * scale, 
+					gs.getY2() * scale
+			);
+			
+			if (gs instanceof CharSegment)
+			{
+				CharSegment cs = (CharSegment)gs;
+				if (cs.getText() != null && cs.getText().equals(" "))
+				{
+					g.setColor(Color.gray);
+					
+					g.drawRect((int)s.getX1(), (int)dim.getHeight() - (int)s.getY2(), 
+							(int)s.getWidth(), (int)s.getHeight());
+					
+					g.setColor(Color.black);
+				}
+				else
+				{
+					g.drawRect((int)s.getX1(), (int)dim.getHeight() - (int)s.getY2(), 
+							(int)s.getWidth(), (int)s.getHeight());
+				}
+			}
+			else
+			{
+				if (gs instanceof TextBlock)
+					g.setColor(Color.blue);
+					
+				g.drawRect((int)s.getX1(), (int)dim.getHeight() - (int)s.getY2(), 
+						(int)s.getWidth(), (int)s.getHeight());
+			}
+			
+			g.setColor(Color.black);
+		}
+		g.setColor(Color.red);
+		for (AdjacencyEdge<? extends GenericSegment> e : ag.getEdges())
+		{
+			GenericSegment s = e.toBoundingSegment();
+			g.drawRect((int)s.getX1(), (int)dim.getHeight() - (int)s.getY2(), 
+					(int)s.getWidth(), (int)s.getHeight());
+		}
+		g.setColor(Color.black);
+		
+		long t2 = System.currentTimeMillis();
+		
+		if (DEBUG_TEXT) System.out.println("Time to generate image: " + (t2 - t1));
+		
+		return bi;
+	}
+	*/
+	
 	public static void outputPNG(List<? extends GenericSegment> segments, 
 			GenericSegment pageBounds, String filename, float scale)
 	{
-		String newFilename = filename.replaceFirst("\\.png$", ".jpeg");
-		File outputfile = new File(newFilename);
-	//	File outputfile = new File(filename);
+//		Uncomment for JPEG output (faster)
+//		String newFilename = filename.replaceFirst("\\.png$", ".jpeg");
+//		File outputfile = new File(newFilename);
+		File outputfile = new File(filename);
 		try 
 		{
 			long t3 = System.currentTimeMillis();
-			ImageIO.write(createImage(segments, pageBounds, scale), "jpeg", outputfile);
+			ImageIO.write(createImage(segments, pageBounds, scale), "png", outputfile);
 			long t4 = System.currentTimeMillis();
 			if (DEBUG_TEXT) System.out.println("Time to write image: " + (t4 - t3));
 		} 
@@ -174,5 +259,27 @@ public class ImgOutputUtils
 			e.printStackTrace();
 		}
 	}
-
+	
+	/*
+	public static void outputPNG(AdjacencyGraph<? extends GenericSegment> ag, 
+			GenericSegment pageBounds, String filename, float scale)
+	{
+//		Uncomment for JPEG output (faster)
+//		String newFilename = filename.replaceFirst("\\.png$", ".jpeg");
+//		File outputfile = new File(newFilename);
+		File outputfile = new File(filename);
+		try 
+		{
+			long t3 = System.currentTimeMillis();
+			ImageIO.write(createImage(ag, pageBounds, scale), "png", outputfile);
+			long t4 = System.currentTimeMillis();
+			if (DEBUG_TEXT) System.out.println("Time to write image: " + (t4 - t3));
+		} 
+		catch (IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	*/
 }

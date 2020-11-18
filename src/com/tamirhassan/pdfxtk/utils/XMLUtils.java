@@ -127,7 +127,7 @@ public class XMLUtils
 	                //resultPage.findBoundingBox();
 	                // System.out.println("Result page: " + resultPage);
 	                
-	                resultPage.addAsXmillum(resultDocument, newPageElement, 
+	                resultPage.addAsXML(resultDocument, newPageElement, 
 		                	resultPage, Utils.XML_RESOLUTION);
 	                
 	                docElement.appendChild(newPageElement);

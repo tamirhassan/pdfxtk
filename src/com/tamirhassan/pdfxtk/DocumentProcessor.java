@@ -35,8 +35,8 @@ import com.tamirhassan.pdfxtk.model.TextFragment;
 import com.tamirhassan.pdfxtk.utils.ImgOutputUtils;
 import com.tamirhassan.pdfxtk.utils.XMLUtils;
 
-public class DocumentProcessor {
-
+public class DocumentProcessor 
+{
     // This is the default encoding of the text to be output.    
     private static final String DEFAULT_ENCODING =
 									            //null;
@@ -61,17 +61,15 @@ public class DocumentProcessor {
 	protected int startPage = 1;
 	protected int endPage = Integer.MAX_VALUE;
 
-	private PDDocument PDDoc;  // required for e.g. rendering
-	private List<TextFragment> mtf;
-	private List<CharSegment> chars;
-	private GenericSegment pageDims;
-	private int currPageNo;
+	protected PDDocument PDDoc;  // required for e.g. rendering
+	protected List<TextFragment> mtf;
+	protected List<CharSegment> chars;
+	protected GenericSegment pageDims;
+	protected int currPageNo;
 	
 	// for debugging
 	protected final static boolean OUTPUT_TEXT_IMG = false;
 	
-    private final static int PAGE_NO = -1;
-
     /**
      * Empty constructor
      * 
@@ -148,18 +146,16 @@ public class DocumentProcessor {
 
 //	    	File file = openFile();
 
-        try {
+        try 
+        {
 	        PDDoc = PDDocument.load(inputFile);
+	        
+	        int docStartPage = 1;
+	        int docEndPage = PDDoc.getNumberOfPages();
 
-	        int pageFrom = PAGE_NO;
-	        int pageTo = PAGE_NO;
-	        if (PAGE_NO <= 0) {
-	            pageFrom = 1;
-	            pageTo = PDDoc.getNumberOfPages();
-	        }
 	        List<Page> pages = new ArrayList<>();
 	
-	        for (int page = pageFrom; page <= pageTo; page++) {
+	        for (int page = docStartPage; page <= docEndPage; page ++) {
 	        	if (page >= startPage && page <= endPage)
 	        	{
 		        	System.out.println("Processing page: " + page);
@@ -194,7 +190,9 @@ public class DocumentProcessor {
 	        XMLUtils.outputXHTMLResult(pages, getOutFile());
 	        PDDoc.close();
 	        
-        } catch (IOException e) {
+        } 
+        catch (IOException e) 
+        {
             throw new DocumentProcessingException(e);
         }
 	}
@@ -257,7 +255,7 @@ public class DocumentProcessor {
 		this.encoding = encoding;
 	}
 
-	private String getInFile() {
+	protected String getInFile() {
 		return inFile;
 	}
 
@@ -265,7 +263,7 @@ public class DocumentProcessor {
 		this.inFile = inFile;
 	}
 
-	private String getOutFile() {
+	protected String getOutFile() {
 		return outFile;
 	}
 

@@ -110,7 +110,7 @@ public class Page extends CompositeSegment<GenericSegment> implements IXHTMLSegm
         }
     }
     
-    public void addAsXmillum(Document resultDocument, Element parent, 
+    public void addAsXML(Document resultDocument, Element parent, 
     	GenericSegment pageDim, float resolution)
     {
     	//System.out.println("adding as XML with pageDim: " + pageDim);
@@ -118,7 +118,7 @@ public class Page extends CompositeSegment<GenericSegment> implements IXHTMLSegm
         while(itemIter.hasNext())
         {
             GenericSegment thisItem = (GenericSegment)itemIter.next();
-        	thisItem.addAsXmillum(resultDocument, parent, pageDim, resolution);
+        	thisItem.addAsXML(resultDocument, parent, pageDim, resolution);
         }
     }
     

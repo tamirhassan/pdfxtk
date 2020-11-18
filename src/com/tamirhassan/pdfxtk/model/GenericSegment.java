@@ -51,7 +51,7 @@ import java.util.List;
  * @author Tamir Hassan, pdfanalyser@tamirhassan.com
  * @version PDF Analyser 0.9
  */
-public class GenericSegment implements Cloneable, IXmillumSegment, Serializable {
+public class GenericSegment implements Cloneable, IXMLSegment, Serializable {
     private static final long serialVersionUID = 1L;
 
     protected float x1, x2, y1, y2;
@@ -492,14 +492,21 @@ public class GenericSegment implements Cloneable, IXmillumSegment, Serializable 
 		return retVal.toString();
 	}
 
-	public void addAsXmillum(Document resultDocument, Element parent,
-		GenericSegment pageDim, float resolution)
+	public void addAsXML(Document resultDocument, Element parent,
+			GenericSegment pageDim, float resolution)
 	{
-		//System.out.println(this);
+		addAsXmillum(resultDocument, parent, pageDim, resolution, -1);
+	}
+	
+	public void addAsXmillum(Document resultDocument, Element parent,
+		GenericSegment pageDim, float resolution, int id)
+	{
 		Element newSegmentElement = resultDocument
 			.createElement(tagName());
 		
 		this.setElementAttributes(resultDocument, newSegmentElement, pageDim, resolution);
+		if (id >= 0)
+			newSegmentElement.setAttribute("id", Integer.toString(id));
 		parent.appendChild(newSegmentElement);
 	}
 }

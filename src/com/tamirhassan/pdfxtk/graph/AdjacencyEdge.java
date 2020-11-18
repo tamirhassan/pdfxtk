@@ -370,8 +370,7 @@ public class AdjacencyEdge<T extends GenericSegment> implements Serializable {
     }
     
     // TH 2020-02-17 commented out as GUI needs to be refactored back in
-    /*
-    public EdgeSegment toDisplayableSegment()
+    public GenericSegment toDisplayableSegment()
     {
     	float newX1, newX2, newY1, newY2, xo1, xo2, yo1, yo2;
     	//System.out.println("direction: " + direction);
@@ -421,9 +420,9 @@ public class AdjacencyEdge<T extends GenericSegment> implements Serializable {
             	//System.out.println("whoops!");
                 newX1 = -1; newX2 = -1; newY1 = -1; newY2 = -1;
         }
-    	return new EdgeSegment(newX1, newX2, newY1, newY2);
+    	return new GenericSegment(newX1, newX2, newY1, newY2);
     }
-    */
+    
     
     public float avgFontSize()
     {
