@@ -63,11 +63,15 @@ public class TextSegment extends GenericSegment
     public final static int OTHER_TEXT = 9;
     public final static int CELL = 2;
     public final static int BODY_TEXT = 40;
-    public final static int HEADING_1 = 41;
-    public final static int HEADING_2 = 42;
-    public final static int HEADING_3 = 43;
-    public final static int ORDERED_LIST_ITEM = 51;
-    public final static int UNORDERED_LIST_ITEM = 52;
+    public final static int HEADING_1 = 141;
+    public final static int HEADING_2 = 142;
+    public final static int HEADING_3 = 143;
+    public final static int ORDERED_LIST_ITEM = 151;
+    public final static int UNORDERED_LIST_ITEM = 152;
+    public final static int HEADER = 61;
+    public final static int FOOTER = 62;
+    public final static int TABLE_HEADING = 71;
+    public final static int TABLE_SUBTITLE = 72;
     
     public float strXPosNewline = -1.0f;
     
@@ -256,7 +260,7 @@ public class TextSegment extends GenericSegment
     
     public void setElementAttributes
         (Document resultDocument, Element newSegmentElement, GenericSegment pageDim,
-        float resolution)
+        float resolution, int id)
     {
 //    	float fontSizeRatio = (resolution / SCREEN_RESOLUTION) * 
 //    		FONT_SIZE_RATIO;
@@ -298,7 +302,8 @@ public class TextSegment extends GenericSegment
         	newSegmentElement.appendChild
                 (resultDocument.createTextNode(Utils.removeInvalidXMLCharacters(this.getText())));
         }
-        super.setElementAttributes(resultDocument, newSegmentElement, pageDim, resolution);
+        super.setElementAttributes(resultDocument, newSegmentElement, pageDim, 
+        		resolution, id);
     }
 
     public boolean isUnderlined() {

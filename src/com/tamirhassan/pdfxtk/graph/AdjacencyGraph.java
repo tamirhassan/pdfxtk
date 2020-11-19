@@ -980,7 +980,7 @@ public class AdjacencyGraph<T extends GenericSegment>// extends DocumentGraph
     	int index = 0;
     	for (T node : vertCopy)
     	{
-    		node.addAsXmillum(resultDocument, newPageElement, pageDim, resolution, index);
+    		node.addAsXML(resultDocument, newPageElement, pageDim, resolution, index);
     		index ++;
     	}
     	

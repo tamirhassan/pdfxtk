@@ -260,8 +260,11 @@ public class GenericSegment implements Cloneable, IXMLSegment, Serializable {
 	}
 
 	public void setElementAttributes(Document resultDocument, Element newSegmentElement,
-		GenericSegment pageDim, float resolution)
+		GenericSegment pageDim, float resolution, int id)
 	{
+		if (id >= 0)
+			newSegmentElement.setAttribute("id", Integer.toString(id));
+		
 		float pageHeight = pageDim.getHeight();
 		//float pageHeight = pageDim.getY2() + pageDim.getY1();
 		newSegmentElement.setAttribute("x", Float.toString(this.getX1() * 
@@ -493,20 +496,13 @@ public class GenericSegment implements Cloneable, IXMLSegment, Serializable {
 	}
 
 	public void addAsXML(Document resultDocument, Element parent,
-			GenericSegment pageDim, float resolution)
-	{
-		addAsXmillum(resultDocument, parent, pageDim, resolution, -1);
-	}
-	
-	public void addAsXmillum(Document resultDocument, Element parent,
 		GenericSegment pageDim, float resolution, int id)
 	{
 		Element newSegmentElement = resultDocument
 			.createElement(tagName());
 		
-		this.setElementAttributes(resultDocument, newSegmentElement, pageDim, resolution);
-		if (id >= 0)
-			newSegmentElement.setAttribute("id", Integer.toString(id));
+		this.setElementAttributes(resultDocument, newSegmentElement, pageDim, 
+				resolution, id);
 		parent.appendChild(newSegmentElement);
 	}
 }

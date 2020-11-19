@@ -340,9 +340,10 @@ public class TextLine extends CompositeSegment<TextFragment>
     
     // IXMillumSegment
 	public void setElementAttributes(Document resultDocument, 
-    	Element newSegmentElement, GenericSegment pageDim, float resolution)
+    	Element newSegmentElement, GenericSegment pageDim, float resolution, int id)
     {
-        super.setElementAttributes(resultDocument, newSegmentElement, pageDim, resolution);
+        super.setElementAttributes(resultDocument, newSegmentElement, pageDim, 
+        		resolution, id);
         
         // TODO: HACK -- the below lines refer to the this.getText() method, as the
         // text currently is not stored.  But this is due to change when the

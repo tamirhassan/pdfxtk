@@ -111,14 +111,14 @@ public class Page extends CompositeSegment<GenericSegment> implements IXHTMLSegm
     }
     
     public void addAsXML(Document resultDocument, Element parent, 
-    	GenericSegment pageDim, float resolution)
+    	GenericSegment pageDim, float resolution, int id)
     {
     	//System.out.println("adding as XML with pageDim: " + pageDim);
         Iterator itemIter = items.iterator();
         while(itemIter.hasNext())
         {
             GenericSegment thisItem = (GenericSegment)itemIter.next();
-        	thisItem.addAsXML(resultDocument, parent, pageDim, resolution);
+        	thisItem.addAsXML(resultDocument, parent, pageDim, resolution, -1);
         }
     }
     

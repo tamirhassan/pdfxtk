@@ -1016,9 +1016,10 @@ public class TextBlock extends CompositeSegment<TextLine> //implements ResultSeg
 	
     // IXMillumSegment
 	public void setElementAttributes(Document resultDocument, 
-    	Element newSegmentElement, GenericSegment pageDim, float resolution)
+    	Element newSegmentElement, GenericSegment pageDim, float resolution, int id)
     {
-        super.setElementAttributes(resultDocument, newSegmentElement, pageDim, resolution);
+        super.setElementAttributes(resultDocument, newSegmentElement, pageDim, 
+        		resolution, id);
         
         // TODO: HACK -- the below lines refer to the this.getText() method, as the
         // text currently is not stored.  But this is due to change when the
@@ -1041,8 +1042,20 @@ public class TextBlock extends CompositeSegment<TextLine> //implements ResultSeg
         		type = "other-text"; break;
         	case CELL:
         		type = "cell"; break;
+        	case ORDERED_LIST_ITEM:
+        		type = "ol-item"; break;
+        	case UNORDERED_LIST_ITEM:
+        		type = "ul-item"; break;
+        	case HEADER:
+        		type = "header"; break;
+        	case FOOTER:
+        		type = "footer"; break;
+        	case TABLE_HEADING:
+        		type = "table-heading"; break;
+        	case TABLE_SUBTITLE:
+        		type = "table-subtitle"; break;
         	default:
-        		type = "error";
+        		type = "other";
         }
         
         newSegmentElement.setAttribute("type", type);

@@ -128,7 +128,7 @@ public class XMLUtils
 	                // System.out.println("Result page: " + resultPage);
 	                
 	                resultPage.addAsXML(resultDocument, newPageElement, 
-		                	resultPage, Utils.XML_RESOLUTION);
+		                	resultPage, Utils.XML_RESOLUTION, -1);
 	                
 	                docElement.appendChild(newPageElement);
 	            }

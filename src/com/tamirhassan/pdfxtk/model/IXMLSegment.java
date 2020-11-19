@@ -44,8 +44,8 @@ import org.w3c.dom.Element;
 public interface IXMLSegment
 {
     public abstract void addAsXML(Document resultDocument, Element parent, 
-    	GenericSegment pageDim, float resolution);
+    	GenericSegment pageDim, float resolution, int id);
     
     public abstract void setElementAttributes(Document resultDocument, Element parent, 
-        	GenericSegment pageDim, float resolution);
+        	GenericSegment pageDim, float resolution, int id);
 }

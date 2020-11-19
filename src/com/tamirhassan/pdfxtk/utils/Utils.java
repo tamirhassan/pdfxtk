@@ -285,8 +285,7 @@ public class Utils
 		return highestValue;
 	}
 	
-	// is used at all?
-	private int findModalFontSize(Collection textBlocks) throws Exception
+	public static int findModalFontSize(Collection textBlocks)
 	{
 		// pre: all items in textBlocks must be TextPosition objects
 		// TODO: create a specific exception here
@@ -310,7 +309,7 @@ public class Utils
 			}
 			catch (java.lang.ClassCastException e)
 			{
-				throw new Exception("Objects in the collection must be of type TextSegment.");
+				// ignore non-text segments
 			}			
 			
 			if (thisBlock != null && thisBlock.getFontSize() > 0 
