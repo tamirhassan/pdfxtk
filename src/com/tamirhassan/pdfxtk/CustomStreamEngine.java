@@ -22,6 +22,7 @@ import org.apache.pdfbox.util.Vector;
 
 import com.tamirhassan.pdfxtk.model.CharSegment;
 import com.tamirhassan.pdfxtk.model.CompositeSegment;
+import com.tamirhassan.pdfxtk.model.ImageSegment;
 import com.tamirhassan.pdfxtk.model.Page;
 import com.tamirhassan.pdfxtk.model.TextFragment;
 import com.tamirhassan.pdfxtk.model.TextSegment;
@@ -44,6 +45,8 @@ public class CustomStreamEngine extends PDFGraphicsStreamEngine
 	// contains CompositeSegments of different sub-types
 	protected List<CompositeSegment<? extends TextSegment>> instrList = 
 			new ArrayList<CompositeSegment<? extends TextSegment>>();
+	
+	protected List<ImageSegment> imageList = new ArrayList<ImageSegment>();
 	
 //	TODO: block that begins with BT and ends with ET - might be useful?
 //	protected CompositeSegment<CompositeSegment<TextFragment>> block = null;
@@ -569,6 +572,14 @@ public class CustomStreamEngine extends PDFGraphicsStreamEngine
 		return retVal;
 	}
 	
+	public List<ImageSegment> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(List<ImageSegment> imageList) {
+		this.imageList = imageList;
+	}
+
 	/**
 	 * @return Generate list containing text at instruction (operator) level
 	 */
@@ -729,9 +740,39 @@ public class CustomStreamEngine extends PDFGraphicsStreamEngine
 	}
 
 	@Override
-	public void drawImage(PDImage pdImage) throws IOException {
-		// TODO Auto-generated method stub
+	public void drawImage(PDImage pdImage) throws IOException 
+	{
+		Matrix ctm = getGraphicsState().getCurrentTransformationMatrix();
+        AffineTransform at = ctm.createAffineTransform();
 		
+//      drawBufferedImage(pdImage.getImage(), at);
+		
+        int width = pdImage.getWidth();
+        int height = pdImage.getHeight();
+        
+        double scaleX = at.getScaleX();
+        double scaleY = at.getScaleY();
+        
+        // this was a problem with google019.pdf
+        if (scaleX == 0.0) scaleX = 1.0;
+        if (scaleY == 0.0) scaleY = 1.0;
+        
+        ImageSegment newImageSegment = new ImageSegment(
+        		(float)at.getTranslateX(),
+        		(float)(at.getTranslateX()+(width*scaleX)), 
+        		(float)at.getTranslateY(), 
+        		(float)(at.getTranslateY()+(height*scaleY)),
+        		pdImage);
+
+		newImageSegment.correctNegativeDimensions();
+		newImageSegment.rotate(getPage());
+
+//		TODO: get clip bounds and convert to rectangular segment
+//		newImageSegment.shrinkBoundingBox(clipBounds);
+		if (!newImageSegment.isZeroSize())
+		{
+			imageList.add(newImageSegment);
+		}
 	}
 
 	@Override

@@ -55,7 +55,8 @@ public class CompositeSegment<T extends GenericSegment> extends TextSegment
 //	boolean preserveLineBreaks = false;
 	boolean preserveLineBreaks = true;
 //	double threshMult = 0.15;
-	double threshMult = 0.25;
+//	double threshMult = 0.25;
+	double threshMult = 0.15;
 
 //	protected boolean constantFont = true;
 //	protected boolean constantFontSize = true;
@@ -78,8 +79,7 @@ public class CompositeSegment<T extends GenericSegment> extends TextSegment
 	 * @param fontSize
 	 *            The (main) font size in the segment.
 	 */
-	/* 30.11.06: these constructors appear to be useless*/
-	// 1.12.06: but they are used by TextBlock...
+
 	public CompositeSegment(float x1, float x2, float y1, float y2,
 			String text, String fontName, float fontSize)
 	{

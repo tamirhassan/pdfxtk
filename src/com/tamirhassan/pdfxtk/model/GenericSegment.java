@@ -259,7 +259,8 @@ public class GenericSegment implements Cloneable, IXMLSegment, Serializable {
 		return attributeList;
 	}
 
-	public void setElementAttributes(Document resultDocument, Element newSegmentElement,
+	public void setElementAttributes(Document resultDocument, 
+		Element newSegmentElement,
 		GenericSegment pageDim, float resolution, int id)
 	{
 		if (id >= 0)

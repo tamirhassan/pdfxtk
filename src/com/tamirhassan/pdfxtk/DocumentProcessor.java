@@ -29,6 +29,7 @@ import org.apache.pdfbox.util.Vector;
 import com.tamirhassan.pdfxtk.exceptions.DocumentProcessingException;
 import com.tamirhassan.pdfxtk.model.CharSegment;
 import com.tamirhassan.pdfxtk.model.GenericSegment;
+import com.tamirhassan.pdfxtk.model.ImageSegment;
 import com.tamirhassan.pdfxtk.model.Page;
 import com.tamirhassan.pdfxtk.model.TextBlock;
 import com.tamirhassan.pdfxtk.model.TextFragment;
@@ -64,6 +65,7 @@ public class DocumentProcessor
 	protected PDDocument PDDoc;  // required for e.g. rendering
 	protected List<TextFragment> mtf;
 	protected List<CharSegment> chars;
+	protected List<ImageSegment> images;
 	protected GenericSegment pageDims;
 	protected int currPageNo;
 	
@@ -104,6 +106,14 @@ public class DocumentProcessor
 
 	public void setChars(List<CharSegment> chars) {
 		this.chars = chars;
+	}
+
+	public List<ImageSegment> getImages() {
+		return images;
+	}
+
+	public void setImages(List<ImageSegment> images) {
+		this.images = images;
 	}
 
 	protected GenericSegment getPageDims() {
@@ -179,6 +189,7 @@ public class DocumentProcessor
 		            mtf = cse.getMergedFragmentsFromChars(0.6f, true);
 		            chars = cse.getChars();
 		            pageDims = cse.getPageDimensions();
+		            images = cse.getImageList();
 		
 	                Page theResult = customPageProcessing();
 	                

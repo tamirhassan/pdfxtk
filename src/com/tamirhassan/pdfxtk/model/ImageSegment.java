@@ -32,10 +32,11 @@
 package com.tamirhassan.pdfxtk.model;
 
 
+import java.util.UUID;
+
+import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import java.util.UUID;
 
 /**
  * ImageSegment document element; represents a (bitmap) image on the page
@@ -43,12 +44,17 @@ import java.util.UUID;
  * @author Tamir Hassan, pdfanalyser@tamirhassan.com
  * @version PDF Analyser 0.9
  */
-public class ImageSegment extends GenericSegment implements IXHTMLSegment {
+public class ImageSegment extends GenericSegment 
+		implements IXHTMLSegment, IXMLSegment
+{
 
-    protected byte[] imageData;
+//  protected byte[] imageData;
 
+	protected String suffix;
+	
+	PDImage pdImage;
+	
     protected UUID uuid = UUID.randomUUID();
-
 
     public ImageSegment(float x1, float x2, float y1, float y2) {
         this(x1, x2, y1, y2, null);
@@ -68,28 +74,52 @@ public class ImageSegment extends GenericSegment implements IXHTMLSegment {
         float x2,
         float y1,
         float y2,
-        byte[] imageData
+        PDImage pdImage
         )
     {
 		super(x1, x2, y1, y2);
-        this.imageData = imageData;
+        this.pdImage = pdImage;
     }
 
+    public PDImage getPDImage() {
+		return pdImage;
+	}
 
-    public byte[] getImageData() {
-        return imageData;
-    }
 
-    public UUID getUuid() {
+	public void setPDImage(PDImage pdImage) {
+		this.pdImage = pdImage;
+	}
+
+
+	public UUID getUuid() {
         return uuid;
     }
 
+    public String getSuffix() {
+		return suffix;
+	}
 
-    @Override
-    public void addAsXHTML(Document resultDocument, Element parent) {
+
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
+
+
+	@Override
+    public void addAsXHTML(Document resultDocument, Element parent) 
+	{
         Element newImgElement = resultDocument.createElement("img");
-        newImgElement.setAttribute( "src", uuid.toString() + ".png");
+        newImgElement.setAttribute( "src", "img-" + uuid.toString() + "." + suffix);
         newImgElement.setAttribute( "width", "" + getWidth());
         newImgElement.setAttribute( "height", "" + getHeight());
+    }
+	
+	@Override
+    public void setElementAttributes(Document resultDocument, Element newImgElement,
+    		GenericSegment pageDim, float resolution, int id)
+	{
+        newImgElement.setAttribute( "src", "img-" + uuid.toString() + "." + suffix);
+        newImgElement.setAttribute( "px-width", "" + getWidth());
+        newImgElement.setAttribute( "px-height", "" + getHeight());
     }
 }

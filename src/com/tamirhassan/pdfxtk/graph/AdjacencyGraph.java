@@ -566,11 +566,6 @@ public class AdjacencyGraph<T extends GenericSegment>// extends DocumentGraph
     	
         for (T thisBlock: vert)
         {
-        	if (((TextSegment)thisBlock).getText().equals("L"))
-        	{
-//        		System.out.println("test");
-        	}
-        	
         	T neighbourLeft = findNeighbourLeft(thisBlock);
         	if (neighbourLeft != null)
         	{
@@ -593,11 +588,6 @@ public class AdjacencyGraph<T extends GenericSegment>// extends DocumentGraph
     	
         for (T thisBlock: vert)
         {
-        	if (((TextSegment)thisBlock).getText().equals("L"))
-        	{
-//        		System.out.println("test");
-        	}
-        	
         	T neighbourRight = findNeighbourRight(thisBlock);
         	if (neighbourRight != null)
         	{
